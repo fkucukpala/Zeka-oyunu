@@ -274,4 +274,184 @@ export const PUZZLES: Puzzle[] = [
       { level: 3, title: 'Soslar', words: ['KETÇAP', 'MAYONEZ', 'PESTO', 'SALSA'] },
     ],
   },
+  {
+    id: 31,
+    groups: [
+      { level: 0, title: 'Okyanuslar', words: ['PASİFİK', 'HİNT', 'ARKTİK', 'ATLANTİK'] },
+      { level: 1, title: 'Edebî türler', words: ['ROMAN', 'ŞİİR', 'DENEME', 'ÖYKÜ'] },
+      { level: 2, title: 'Başvuru kitapları', words: ['ATLAS', 'SÖZLÜK', 'ANSİKLOPEDİ', 'ALMANAK'] },
+      { level: 3, title: 'Tersten de aynı okunur', words: ['KABAK', 'KAZAK', 'KEPEK', 'NEDEN'] },
+    ],
+  },
+  {
+    id: 32,
+    groups: [
+      { level: 0, title: 'Bireysel sporlar', words: ['YÜZME', 'OKÇULUK', 'ESKRİM', 'BOKS'] },
+      { level: 1, title: 'Yüzme stilleri', words: ['SERBEST', 'KURBAĞALAMA', 'SIRTÜSTÜ', 'KELEBEK'] },
+      { level: 2, title: 'Böcekler', words: ['UĞURBÖCEĞİ', 'ÇEKİRGE', 'YUSUFÇUK', 'ATEŞBÖCEĞİ'] },
+      { level: 3, title: 'Satranç terimleri', words: ['ROK', 'MAT', 'PAT', 'GAMBİT'] },
+    ],
+  },
+  {
+    id: 33,
+    groups: [
+      { level: 0, title: 'Çorbalar', words: ['EZOGELİN', 'TARHANA', 'YAYLA', 'İŞKEMBE'] },
+      { level: 1, title: 'Bakliyat', words: ['NOHUT', 'FASULYE', 'BARBUNYA', 'MERCİMEK'] },
+      { level: 2, title: 'Yer şekilleri', words: ['OVA', 'VADİ', 'KANYON', 'PLATO'] },
+      { level: 3, title: 'Halk ozanları', words: ['KARACAOĞLAN', 'PİR SULTAN', 'DADALOĞLU', 'VEYSEL'] },
+    ],
+  },
+  {
+    id: 34,
+    groups: [
+      { level: 0, title: 'Zaman birimleri', words: ['SANİYE', 'DAKİKA', 'SAAT', 'HAFTA'] },
+      { level: 1, title: 'Uzay', words: ['ROKET', 'UYDU', 'ASTRONOT', 'GÖKTAŞI'] },
+      { level: 2, title: 'Ay evreleri', words: ['HİLAL', 'DOLUNAY', 'YENİAY', 'İLKDÖRDÜN'] },
+      { level: 3, title: 'Türk bayrağında', words: ['AY', 'YILDIZ', 'KIRMIZI', 'BEYAZ'] },
+    ],
+  },
+  {
+    id: 35,
+    groups: [
+      { level: 0, title: 'Okulda', words: ['TENEFFÜS', 'KARNE', 'ÖDEV', 'SINAV'] },
+      { level: 1, title: 'Resmî belgeler', words: ['KİMLİK', 'PASAPORT', 'EHLİYET', 'DİPLOMA'] },
+      { level: 2, title: 'Seyahat', words: ['BAVUL', 'BİLET', 'OTEL', 'REHBER'] },
+      { level: 3, title: 'Saatin parçaları', words: ['AKREP', 'YELKOVAN', 'KADRAN', 'ZEMBEREK'] },
+    ],
+  },
+  {
+    id: 36,
+    groups: [
+      { level: 0, title: 'Pişirme yöntemleri', words: ['HAŞLAMA', 'KIZARTMA', 'KAVURMA', 'BUĞULAMA'] },
+      { level: 1, title: 'Akrabalar', words: ['TEYZE', 'HALA', 'DAYI', 'AMCA'] },
+      { level: 2, title: 'Kahve çeşitleri', words: ['MENENGİÇ', 'DİBEK', 'ESPRESSO', 'FİLTRE'] },
+      { level: 3, title: 'Hababam Sınıfı karakterleri', words: ['İNEK ŞABAN', 'DAMAT FERİT', 'GÜDÜK NECMİ', 'KEL MAHMUT'] },
+    ],
+  },
+  {
+    id: 37,
+    groups: [
+      { level: 0, title: 'Telefon aksesuarları', words: ['ŞARJ', 'KILIF', 'KULAKLIK', 'POWERBANK'] },
+      { level: 1, title: 'Klavye tuşları', words: ['ENTER', 'SHIFT', 'ESC', 'TAB'] },
+      { level: 2, title: 'Futbol mevkileri', words: ['KALECİ', 'DEFANS', 'ORTA SAHA', 'FORVET'] },
+      { level: 3, title: 'Türk müziği makamları', words: ['HİCAZ', 'RAST', 'UŞŞAK', 'NİHAVENT'] },
+    ],
+  },
+  {
+    id: 38,
+    groups: [
+      { level: 0, title: 'Kırtasiye', words: ['ZIMBA', 'MAKAS', 'YAPIŞTIRICI', 'ATAŞ'] },
+      { level: 1, title: 'Berberde', words: ['TARAK', 'USTURA', 'FÖN', 'KÖPÜK'] },
+      { level: 2, title: 'Ressamın malzemeleri', words: ['TUVAL', 'PALET', 'ŞÖVALE', 'FIRÇA'] },
+      { level: 3, title: 'Türk ressamlar', words: ['ABİDİN DİNO', 'OSMAN HAMDİ', 'FİKRET MUALLA', 'BEDRİ RAHMİ'] },
+    ],
+  },
+  {
+    id: 39,
+    groups: [
+      { level: 0, title: 'Yaz meyveleri', words: ['KAVUN', 'KARPUZ', 'ŞEFTALİ', 'KAYISI'] },
+      { level: 1, title: 'Kış meyveleri', words: ['PORTAKAL', 'MANDALİNA', 'NAR', 'GREYFURT'] },
+      { level: 2, title: 'Kurusu da yenir', words: ['DUT', 'İNCİR', 'ÜZÜM', 'HURMA'] },
+      { level: 3, title: 'Bahçe aletleri', words: ['TIRPAN', 'KÜREK', 'ÇAPA', 'TIRMIK'] },
+    ],
+  },
+  {
+    id: 40,
+    groups: [
+      { level: 0, title: 'Hava taşıtları', words: ['UÇAK', 'HELİKOPTER', 'ZEPLİN', 'PLANÖR'] },
+      { level: 1, title: 'Doğum günü', words: ['PASTA', 'MUM', 'HEDİYE', 'BALON'] },
+      { level: 2, title: 'Düğün hazırlığı', words: ['NİKÂH', 'KINA', 'ÇEYİZ', 'DAVETİYE'] },
+      { level: 3, title: 'İtalyan mutfağı', words: ['PİZZA', 'RİSOTTO', 'LAZANYA', 'TİRAMİSU'] },
+    ],
+  },
+  {
+    id: 41,
+    groups: [
+      { level: 0, title: 'Ev aletleri', words: ['BUZDOLABI', 'FIRIN', 'ÜTÜ', 'SÜPÜRGE'] },
+      { level: 1, title: 'Ekmek çeşitleri', words: ['PİDE', 'LAVAŞ', 'BAZLAMA', 'SOMUN'] },
+      { level: 2, title: 'Gemide', words: ['DÜMEN', 'ÇAPA', 'DİREK', 'PERVANE'] },
+      { level: 3, title: 'Pide çeşitleri', words: ['KIYMALI', 'KAŞARLI', 'KUŞBAŞILI', 'SUCUKLU'] },
+    ],
+  },
+  {
+    id: 42,
+    groups: [
+      { level: 0, title: 'Sınıfta', words: ['TAHTA', 'SIRA', 'TEBEŞİR', 'KÜRSÜ'] },
+      { level: 1, title: 'Marangoz aletleri', words: ['TESTERE', 'RENDE', 'ÇEKİÇ', 'KESER'] },
+      { level: 2, title: 'Masa oyunları', words: ['TAVLA', 'SATRANÇ', 'DAMA', 'MANGALA'] },
+      { level: 3, title: 'Bir renkle başlar', words: ['MORAL', 'ALEV', 'BOZA', 'AKŞAM'] },
+    ],
+  },
+  {
+    id: 43,
+    groups: [
+      { level: 0, title: 'Hayvanat bahçesinde', words: ['ZEBRA', 'ZÜRAFA', 'FİL', 'GERGEDAN'] },
+      { level: 1, title: 'Avustralya', words: ['SİDNEY', 'BUMERANG', 'KOALA', 'KANGURU'] },
+      { level: 2, title: 'Tuz çeşitleri', words: ['KAYA', 'DENİZ', 'HİMALAYA', 'SOFRA'] },
+      { level: 3, title: 'Shakespeare karakterleri', words: ['HAMLET', 'OTELLO', 'MACBETH', 'ROMEO'] },
+    ],
+  },
+  {
+    id: 44,
+    groups: [
+      { level: 0, title: 'Dişçide', words: ['DOLGU', 'KAPLAMA', 'İMPLANT', 'KÖPRÜ'] },
+      { level: 1, title: 'Televizyon', words: ['KANAL', 'KUMANDA', 'ANTEN', 'DİZİ'] },
+      { level: 2, title: 'Gitarın parçaları', words: ['PERDE', 'SAP', 'PENA', 'TEL'] },
+      { level: 3, title: 'Sahne sanatları', words: ['OPERA', 'BALE', 'PANDOMİM', 'MÜZİKAL'] },
+    ],
+  },
+  {
+    id: 45,
+    groups: [
+      { level: 0, title: 'İstanbul simgeleri', words: ['AYASOFYA', 'GALATA KULESİ', 'KIZ KULESİ', 'YEREBATAN'] },
+      { level: 1, title: 'Antik Mısır', words: ['PİRAMİT', 'SFENKS', 'FİRAVUN', 'NİL'] },
+      { level: 2, title: 'Nehirler', words: ['TUNA', 'FIRAT', 'DİCLE', 'AMAZON'] },
+      { level: 3, title: "Paris'te", words: ['EYFEL', 'LOUVRE', 'NOTRE DAME', 'ŞANZELİZE'] },
+    ],
+  },
+  {
+    id: 46,
+    groups: [
+      { level: 0, title: 'Hastalıklar', words: ['GRİP', 'NEZLE', 'KIZAMIK', 'SUÇİÇEĞİ'] },
+      { level: 1, title: 'İlaç biçimleri', words: ['ŞURUP', 'MERHEM', 'KAPSÜL', 'İĞNE'] },
+      { level: 2, title: 'Ekranlı cihazlar', words: ['TELEFON', 'MONİTÖR', 'TELEVİZYON', 'TABLET'] },
+      { level: 3, title: 'Misafire ikram', words: ['KOLONYA', 'LOKUM', 'KAHVE', 'ŞEKER'] },
+    ],
+  },
+  {
+    id: 47,
+    groups: [
+      { level: 0, title: 'Şehirde yollar', words: ['CADDE', 'SOKAK', 'MEYDAN', 'BULVAR'] },
+      { level: 1, title: 'İstanbul semtleri', words: ['TAKSİM', 'BEYAZIT', 'SULTANAHMET', 'EMİNÖNÜ'] },
+      { level: 2, title: 'Ankara semtleri', words: ['KIZILAY', 'ÇANKAYA', 'ULUS', 'KEÇİÖREN'] },
+      { level: 3, title: 'İzmir semtleri', words: ['KORDON', 'ALSANCAK', 'KARŞIYAKA', 'BORNOVA'] },
+    ],
+  },
+  {
+    id: 48,
+    groups: [
+      { level: 0, title: 'Mutfak ölçüleri', words: ['BARDAK', 'KAŞIK', 'KASE', 'TUTAM'] },
+      { level: 1, title: 'Türk kahvesi', words: ['CEZVE', 'KÖPÜK', 'TELVE', 'FİNCAN'] },
+      { level: 2, title: 'Banyoda', words: ['KÜVET', 'LAVABO', 'DUŞ', 'KLOZET'] },
+      { level: 3, title: 'Yönetmen soyadları', words: ['CEYLAN', 'ERKSAN', 'AKAD', 'GÜNEY'] },
+    ],
+  },
+  {
+    id: 49,
+    groups: [
+      { level: 0, title: 'Pusulada', words: ['KUZEY', 'DOĞU', 'BATI', 'İBRE'] },
+      { level: 1, title: 'Rüzgârlar', words: ['POYRAZ', 'LODOS', 'KEŞİŞLEME', 'KARAYEL'] },
+      { level: 2, title: 'Gemide yer adları', words: ['İSKELE', 'PRUVA', 'KIÇ', 'GÜVERTE'] },
+      { level: 3, title: 'Bayrak anlamında', words: ['SANCAK', 'FLAMA', 'BANDIRA', 'ALEM'] },
+    ],
+  },
+  {
+    id: 50,
+    groups: [
+      { level: 0, title: 'Oyuncaklar', words: ['BEBEK', 'TOP', 'UÇURTMA', 'ROBOT'] },
+      { level: 1, title: 'Sokak oyunları', words: ['SAKLAMBAÇ', 'YAKAN TOP', 'SEK SEK', 'İP ATLAMA'] },
+      { level: 2, title: 'Bebek bakımı', words: ['BEZ', 'EMZİK', 'MAMA', 'BİBERON'] },
+      { level: 3, title: 'Nasreddin Hoca fıkralarından', words: ['KAZAN', 'YORGAN', 'MAYA', 'KÜRK'] },
+    ],
+  },
 ];

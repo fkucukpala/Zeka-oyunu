@@ -227,7 +227,7 @@ const styles = StyleSheet.create({
   row: { flexDirection: 'row', justifyContent: 'space-between' },
   toast: {
     position: 'absolute',
-    top: 40,
+    top: -6,
     alignSelf: 'center',
     backgroundColor: colors.accent,
     paddingHorizontal: 16,
