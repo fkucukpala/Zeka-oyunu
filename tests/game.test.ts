@@ -72,3 +72,18 @@ test('shareText kullanılan ipucu sayısını yazar', () => {
   const p = PUZZLES[0];
   assert.equal(shareText(p, 3, [p.groups[1].words], 2), 'Bağlantı\nBulmaca #3\n💡 2 ipucu\n🟩🟩🟩🟩');
 });
+
+test('farklı bulmacalarda neredeyse aynı grup yok (en fazla 2 ortak kelime)', () => {
+  const groups = PUZZLES.flatMap((p) => p.groups.map((g) => ({ id: p.id, title: g.title, words: g.words })));
+  const clashes: string[] = [];
+  for (let i = 0; i < groups.length; i++) {
+    for (let j = i + 1; j < groups.length; j++) {
+      const a = groups[i];
+      const b = groups[j];
+      if (a.id === b.id) continue;
+      const common = a.words.filter((w) => b.words.includes(w));
+      if (common.length >= 3) clashes.push(`#${a.id} "${a.title}" ~ #${b.id} "${b.title}": ${common.join(', ')}`);
+    }
+  }
+  assert.deepEqual(clashes, []);
+});

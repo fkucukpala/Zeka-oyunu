@@ -414,7 +414,7 @@ export const PUZZLES: Puzzle[] = [
     groups: [
       { level: 0, title: 'Hastalıklar', words: ['GRİP', 'NEZLE', 'KIZAMIK', 'SUÇİÇEĞİ'] },
       { level: 1, title: 'İlaç biçimleri', words: ['ŞURUP', 'MERHEM', 'KAPSÜL', 'İĞNE'] },
-      { level: 2, title: 'Ekranlı cihazlar', words: ['TELEFON', 'MONİTÖR', 'TELEVİZYON', 'TABLET'] },
+      { level: 2, title: 'Ekranlı cihazlar', words: ['MONİTÖR', 'AKILLI SAAT', 'E-KİTAP OKUYUCU', 'TABLET'] },
       { level: 3, title: 'Misafire ikram', words: ['KOLONYA', 'LOKUM', 'KAHVE', 'ŞEKER'] },
     ],
   },
@@ -452,6 +452,456 @@ export const PUZZLES: Puzzle[] = [
       { level: 1, title: 'Sokak oyunları', words: ['SAKLAMBAÇ', 'YAKAN TOP', 'SEK SEK', 'İP ATLAMA'] },
       { level: 2, title: 'Bebek bakımı', words: ['BEZ', 'EMZİK', 'MAMA', 'BİBERON'] },
       { level: 3, title: 'Nasreddin Hoca fıkralarından', words: ['KAZAN', 'YORGAN', 'MAYA', 'KÜRK'] },
+    ],
+  },
+  {
+    id: 51,
+    groups: [
+      { level: 0, title: 'Kamp malzemeleri', words: ['ÇADIR', 'UYKU TULUMU', 'MATARA', 'KAMP OCAĞI'] },
+      { level: 1, title: 'Işık kaynakları', words: ['MUM', 'LAMBA', 'AMPUL', 'FENER'] },
+      { level: 2, title: 'Vapur iskeleleri', words: ['KARAKÖY', 'KABATAŞ', 'ÜSKÜDAR', 'EMİNÖNÜ'] },
+      { level: 3, title: 'Sonuna -LIK eklenince eşya olur', words: ['GÖZ', 'KULAK', 'ŞEKER', 'TUZ'] },
+    ],
+  },
+  {
+    id: 52,
+    groups: [
+      { level: 0, title: 'Spor salonunda', words: ['DAMBIL', 'HALTER', 'KOŞU BANDI', 'ELİPTİK'] },
+      { level: 1, title: 'Basketbol terimleri', words: ['SMAÇ', 'RİBAUNT', 'TURNİKE', 'POTA'] },
+      { level: 2, title: 'Vücut ağırlığıyla egzersiz', words: ['ŞINAV', 'MEKİK', 'PLANK', 'BARFİKS'] },
+      { level: 3, title: 'İçinde bir hayvan saklı', words: ['ATLAS', 'KAZAN', 'FİLE', 'KURTULUŞ'] },
+    ],
+  },
+  {
+    id: 53,
+    groups: [
+      { level: 0, title: 'Sıcak içecekler', words: ['ÇAY', 'SAHLEP', 'KAKAO', 'SICAK ÇİKOLATA'] },
+      { level: 1, title: 'Bitki çayları', words: ['ADAÇAYI', 'PAPATYA', 'KUŞBURNU', 'IHLAMUR'] },
+      { level: 2, title: 'Dolması yapılır', words: ['BİBER', 'KABAK', 'PATLICAN', 'DOMATES'] },
+      { level: 3, title: 'Bir kuş adıyla başlar', words: ['KARGAŞA', 'KAZAK', 'KUZGUNCUK', 'TAVUKGÖĞSÜ'] },
+    ],
+  },
+  {
+    id: 54,
+    groups: [
+      { level: 0, title: 'Kış sporları', words: ['KAYAK', 'SNOWBOARD', 'KIZAK', 'BUZ HOKEYİ'] },
+      { level: 1, title: 'Kayak merkezleri', words: ['SARIKAMIŞ', 'KARTALKAYA', 'DAVRAZ', 'ERCİYES'] },
+      { level: 2, title: 'Kar ile ilgili', words: ['KARDAN ADAM', 'ÇIĞ', 'TİPİ', 'LAPA'] },
+      { level: 3, title: 'KAR ile başlar', words: ['KARPUZ', 'KARTAL', 'KARINCA', 'KARNE'] },
+    ],
+  },
+  {
+    id: 55,
+    groups: [
+      { level: 0, title: 'Duyu organları', words: ['GÖZ', 'KULAK', 'BURUN', 'DİL'] },
+      { level: 1, title: 'Yabancı diller', words: ['İNGİLİZCE', 'ALMANCA', 'FRANSIZCA', 'JAPONCA'] },
+      { level: 2, title: 'Japon kültürü', words: ['SUŞİ', 'KİMONO', 'SAMURAY', 'ORİGAMİ'] },
+      { level: 3, title: '___ dili', words: ['ANA', 'İŞARET', 'BEDEN', 'PROGRAMLAMA'] },
+    ],
+  },
+  {
+    id: 56,
+    groups: [
+      { level: 0, title: 'Para birimleri', words: ['DOLAR', 'EURO', 'STERLİN', 'YEN'] },
+      { level: 1, title: 'Altın çeşitleri', words: ['ÇEYREK', 'YARIM', 'TAM', 'CUMHURİYET'] },
+      { level: 2, title: 'Borsada', words: ['HİSSE', 'ENDEKS', 'TAHVİL', 'KUPON'] },
+      { level: 3, title: 'Osmanlı paraları', words: ['AKÇE', 'MECİDİYE', 'SİKKE', 'KURUŞ'] },
+    ],
+  },
+  {
+    id: 57,
+    groups: [
+      { level: 0, title: 'Parkta', words: ['SALINCAK', 'KAYDIRAK', 'TAHTEREVALLİ', 'KUM HAVUZU'] },
+      { level: 1, title: 'Lunaparkta', words: ['DÖNME DOLAP', 'ÇARPIŞAN ARABALAR', 'HIZ TRENİ', 'ATLIKARINCA'] },
+      { level: 2, title: 'Yatak odasında', words: ['YATAK', 'KOMODİN', 'GARDIROP', 'ŞİFONYER'] },
+      { level: 3, title: 'Yerli çizgi filmler', words: ['PEPEE', 'RAFADAN TAYFA', 'KÖSTEBEKGİLLER', 'NİLOYA'] },
+    ],
+  },
+  {
+    id: 58,
+    groups: [
+      { level: 0, title: 'Kabuklu deniz ürünleri', words: ['KARİDES', 'MİDYE', 'İSTİRİDYE', 'YENGEÇ'] },
+      { level: 1, title: 'Mezeler', words: ['HAYDARİ', 'ACILI EZME', 'HUMUS', 'ŞAKŞUKA'] },
+      { level: 2, title: 'Kasapta', words: ['KIYMA', 'KUŞBAŞI', 'PİRZOLA', 'ANTRİKOT'] },
+      { level: 3, title: 'Muğla ve Antalya kıyıları', words: ['BODRUM', 'KAŞ', 'KALKAN', 'DATÇA'] },
+    ],
+  },
+  {
+    id: 59,
+    groups: [
+      { level: 0, title: 'Elektrikli mutfak aletleri', words: ['BLENDER', 'MİKSER', 'TOST MAKİNESİ', 'SU ISITICI'] },
+      { level: 1, title: 'Kek malzemeleri', words: ['UN', 'ŞEKER', 'YUMURTA', 'KABARTMA TOZU'] },
+      { level: 2, title: 'Kek çeşitleri', words: ['HAVUÇLU', 'ISLAK', 'MOZAİK', 'LİMONLU'] },
+      { level: 3, title: 'Taş türleri', words: ['GRANİT', 'BAZALT', 'KUVARS', 'MERMER'] },
+    ],
+  },
+  {
+    id: 60,
+    groups: [
+      { level: 0, title: 'Arabanın dışında', words: ['TEKER', 'FAR', 'TAMPON', 'KAPUT'] },
+      { level: 1, title: 'Trafikte', words: ['KAVŞAK', 'REFÜJ', 'ŞERİT', 'GİŞE'] },
+      { level: 2, title: 'Motorun parçaları', words: ['PİSTON', 'BUJİ', 'KARBÜRATÖR', 'KRANK'] },
+      { level: 3, title: 'Şapka türleri', words: ['SİLİNDİR', 'FÖTR', 'KASKET', 'BERE'] },
+    ],
+  },
+  {
+    id: 61,
+    groups: [
+      { level: 0, title: 'Orta Çağ', words: ['ŞÖVALYE', 'KALE', 'ZIRH', 'MIZRAK'] },
+      { level: 1, title: 'Efsanevi yaratıklar', words: ['EJDERHA', 'TEPEGÖZ', 'ŞAHMERAN', 'ANKA'] },
+      { level: 2, title: 'Dede Korkut kahramanları', words: ['DELİ DUMRUL', 'BAMSI BEYREK', 'KAN TURALI', 'BASAT'] },
+      { level: 3, title: 'Aynı zamanda bir balık', words: ['KILIÇ', 'KALKAN', 'TEKİR', 'MERCAN'] },
+    ],
+  },
+  {
+    id: 62,
+    groups: [
+      { level: 0, title: 'Fotoğraf makinesi', words: ['OBJEKTİF', 'FLAŞ', 'LENS', 'TRİPOD'] },
+      { level: 1, title: 'Göz kusurları', words: ['MİYOP', 'HİPERMETROP', 'ASTİGMAT', 'ŞAŞILIK'] },
+      { level: 2, title: 'Sosyal medya', words: ['BEĞENİ', 'TAKİPÇİ', 'ETİKET', 'HİKÂYE'] },
+      { level: 3, title: 'Fotoğraf türleri', words: ['PORTRE', 'MANZARA', 'SELFİE', 'PANORAMA'] },
+    ],
+  },
+  {
+    id: 63,
+    groups: [
+      { level: 0, title: 'Çay', words: ['DEMLİK', 'İNCE BELLİ', 'TAVŞAN KANI', 'ÇAYDANLIK'] },
+      { level: 1, title: 'Çöl hayvanları', words: ['DEVE', 'ÇÖL TİLKİSİ', 'KERTENKELE', 'YILAN'] },
+      { level: 2, title: 'Burçlar', words: ['AKREP', 'BAŞAK', 'OĞLAK', 'YAY'] },
+      { level: 3, title: 'Temizlik malzemeleri', words: ['KOVA', 'PASPAS', 'SÜNGER', 'FARAŞ'] },
+    ],
+  },
+  {
+    id: 64,
+    groups: [
+      { level: 0, title: 'Uzman doktorlar', words: ['KARDİYOLOG', 'DERMATOLOG', 'NÖROLOG', 'ORTOPEDİST'] },
+      { level: 1, title: 'Hastane bölümleri', words: ['ACİL', 'AMELİYATHANE', 'YOĞUN BAKIM', 'LABORATUVAR'] },
+      { level: 2, title: 'Tıp dışı -LOG meslekleri', words: ['JEOLOG', 'ARKEOLOG', 'SOSYOLOG', 'BİYOLOG'] },
+      { level: 3, title: 'Laboratuvar araçları', words: ['TÜP', 'BEHER', 'PİPET', 'MİKROSKOP'] },
+    ],
+  },
+  {
+    id: 65,
+    groups: [
+      { level: 0, title: 'Saç modelleri', words: ['KAKÜL', 'ATKUYRUĞU', 'ÖRGÜ', 'KÜT'] },
+      { level: 1, title: 'Örgü örerken', words: ['YÜN', 'ŞİŞ', 'TIĞ', 'YUMAK'] },
+      { level: 2, title: 'Binicilik', words: ['EYER', 'NAL', 'DİZGİN', 'ÜZENGİ'] },
+      { level: 3, title: 'Eski silahlar', words: ['TOPUZ', 'GÜRZ', 'YATAĞAN', 'PALA'] },
+    ],
+  },
+  {
+    id: 66,
+    groups: [
+      { level: 0, title: 'Ödeme yöntemleri', words: ['NAKİT', 'KREDİ KARTI', 'HAVALE', 'ÇEK'] },
+      { level: 1, title: 'Faturalar', words: ['SU', 'DOĞALGAZ', 'İNTERNET', 'TELEFON'] },
+      { level: 2, title: 'Fizik konuları', words: ['ELEKTRİK', 'OPTİK', 'MEKANİK', 'MANYETİZMA'] },
+      { level: 3, title: 'Tersten okununca başka kelime', words: ['KAÇ', 'RAF', 'KÖY', 'KAŞ'] },
+    ],
+  },
+  {
+    id: 67,
+    groups: [
+      { level: 0, title: 'Otelde', words: ['RESEPSİYON', 'LOBİ', 'ODA SERVİSİ', 'MİNİBAR'] },
+      { level: 1, title: 'Havalimanında', words: ['BAGAJ', 'GÜMRÜK', 'KAPI', 'PİST'] },
+      { level: 2, title: 'Uçağın parçaları', words: ['KABİN', 'KOKPİT', 'MOTOR', 'KARA KUTU'] },
+      { level: 3, title: 'Hayvanlarda bulunur', words: ['KANAT', 'KUYRUK', 'PENÇE', 'YELE'] },
+    ],
+  },
+  {
+    id: 68,
+    groups: [
+      { level: 0, title: 'Isıtıcılar', words: ['SOBA', 'KALORİFER', 'KOMBİ', 'ŞÖMİNE'] },
+      { level: 1, title: 'Yakıtlar', words: ['ODUN', 'DOĞALGAZ', 'MAZOT', 'BENZİN'] },
+      { level: 2, title: 'Mangal başında', words: ['KÖZ', 'IZGARA', 'ŞİŞ', 'KÖMÜR'] },
+      { level: 3, title: 'Cümlenin ögeleri', words: ['ÖZNE', 'YÜKLEM', 'NESNE', 'TÜMLEÇ'] },
+    ],
+  },
+  {
+    id: 69,
+    groups: [
+      { level: 0, title: 'Vurmalı çalgılar', words: ['DAVUL', 'DARBUKA', 'BENDİR', 'ZİL'] },
+      { level: 1, title: 'Kapıda', words: ['KİLİT', 'KOL', 'EŞİK', 'MENTEŞE'] },
+      { level: 2, title: 'Nota yazımı', words: ['ANAHTAR', 'DİYEZ', 'BEMOL', 'PORTE'] },
+      { level: 3, title: 'Barış Manço şarkıları', words: ['GÜLPEMBE', 'DAĞLAR DAĞLAR', 'ARKADAŞIM EŞEK', 'NANE LİMON KABUĞU'] },
+    ],
+  },
+  {
+    id: 70,
+    groups: [
+      { level: 0, title: 'Gökyüzünde', words: ['BULUT', 'GÜNEŞ', 'GÖKKUŞAĞI', 'AY'] },
+      { level: 1, title: 'Mavinin tonları', words: ['LACİVERT', 'CAMGÖBEĞİ', 'KOBALT', 'ÇİVİT'] },
+      { level: 2, title: 'Yarı değerli taşlar', words: ['AMETİST', 'TURKUAZ', 'OPAL', 'AKİK'] },
+      { level: 3, title: 'Önüne "deniz" gelince canlı', words: ['YILDIZ', 'AT', 'KESTANE', 'ANA'] },
+    ],
+  },
+  {
+    id: 71,
+    groups: [
+      { level: 0, title: 'Türkiye\'de sınavlar', words: ['YKS', 'LGS', 'KPSS', 'ALES'] },
+      { level: 1, title: 'Üniversitede', words: ['PROFESÖR', 'DOÇENT', 'DEKAN', 'REKTÖR'] },
+      { level: 2, title: 'Mezuniyet', words: ['CÜBBE', 'KEP', 'DİPLOMA', 'TÖREN'] },
+      { level: 3, title: 'Kulüp kısaltmaları', words: ['GS', 'FB', 'BJK', 'TS'] },
+    ],
+  },
+  {
+    id: 72,
+    groups: [
+      { level: 0, title: 'Yaz içecekleri', words: ['LİMONATA', 'AYRAN', 'ŞERBET', 'BUZLU ÇAY'] },
+      { level: 1, title: 'Ramazan\'da', words: ['İFTAR', 'SAHUR', 'DAVULCU', 'GÜLLAÇ'] },
+      { level: 2, title: 'Bayramda', words: ['HARÇLIK', 'ŞEKER', 'ARİFE', 'BAYRAMLIK'] },
+      { level: 3, title: 'Gölge oyunu', words: ['KARAGÖZ', 'HACİVAT', 'TUZSUZ DELİ BEKİR', 'ZENNE'] },
+    ],
+  },
+  {
+    id: 73,
+    groups: [
+      { level: 0, title: 'Yatakta', words: ['YASTIK', 'YORGAN', 'PİJAMA', 'NEVRESİM'] },
+      { level: 1, title: 'Kumaş desenleri', words: ['PUANTİYELİ', 'EKOSE', 'ÇİÇEKLİ', 'ZEBRA'] },
+      { level: 2, title: 'Defter çeşitleri', words: ['KARELİ', 'ÇİZGİLİ', 'DÜZ', 'SPİRALLİ'] },
+      { level: 3, title: 'Uyumak anlamında', words: ['KESTİRMEK', 'ŞEKERLEME', 'UYUKLAMAK', 'DALMAK'] },
+    ],
+  },
+  {
+    id: 74,
+    groups: [
+      { level: 0, title: 'Kitabın bölümleri', words: ['KAPAK', 'SAYFA', 'ÖNSÖZ', 'İÇİNDEKİLER'] },
+      { level: 1, title: 'Yayınevinde', words: ['EDİTÖR', 'ÇEVİRMEN', 'YAZAR', 'REDAKTÖR'] },
+      { level: 2, title: 'Kütüphanede', words: ['RAF', 'KATALOG', 'OKUMA SALONU', 'ÖDÜNÇ'] },
+      { level: 3, title: 'Roman kahramanları', words: ['İNCE MEMED', 'ÇALIKUŞU', 'BİHTER', 'HAYRİ İRDAL'] },
+    ],
+  },
+  {
+    id: 75,
+    groups: [
+      { level: 0, title: 'Orman hayvanları', words: ['KURT', 'GEYİK', 'TİLKİ', 'YABAN DOMUZU'] },
+      { level: 1, title: 'Kış uykusuna yatar', words: ['AYI', 'KİRPİ', 'KAPLUMBAĞA', 'YARASA'] },
+      { level: 2, title: 'Dikenli bitkiler', words: ['KAKTÜS', 'BÖĞÜRTLEN', 'DEVEDİKENİ', 'AKASYA'] },
+      { level: 3, title: 'Kurtlar Vadisi karakterleri', words: ['POLAT', 'MEMATİ', 'ABDÜLHEY', 'LAZ ZİYA'] },
+    ],
+  },
+  {
+    id: 76,
+    groups: [
+      { level: 0, title: 'Kilerde', words: ['TUZ', 'UN', 'MAKARNA', 'BULGUR'] },
+      { level: 1, title: 'Metaller ve alaşımlar', words: ['BAKIR', 'BRONZ', 'ÇELİK', 'PİRİNÇ'] },
+      { level: 2, title: 'Olimpiyatlarda', words: ['MADALYA', 'MEŞALE', 'PODYUM', 'HALKA'] },
+      { level: 3, title: 'Önüne "altın" gelir', words: ['ORAN', 'VURUŞ', 'KURAL', 'ÇAĞ'] },
+    ],
+  },
+  {
+    id: 77,
+    groups: [
+      { level: 0, title: 'Bilgisayarda', words: ['DOSYA', 'KLASÖR', 'MASAÜSTÜ', 'ÇÖP KUTUSU'] },
+      { level: 1, title: 'Toplantı odasında', words: ['PROJEKSİYON', 'BEYAZ TAHTA', 'SUNUM', 'GÜNDEM'] },
+      { level: 2, title: 'Gazetede', words: ['MANŞET', 'KÖŞE YAZISI', 'BULMACA', 'İLAN'] },
+      { level: 3, title: 'İçinde bir mevsim saklı', words: ['YAZICI', 'KIŞLA', 'BAHARAT', 'GÜZEL'] },
+    ],
+  },
+  {
+    id: 78,
+    groups: [
+      { level: 0, title: 'Hızlı yemek', words: ['HAMBURGER', 'PİZZA', 'SOSİSLİ', 'NUGGET'] },
+      { level: 1, title: 'Sokak lezzetleri', words: ['KOKOREÇ', 'MİDYE DOLMA', 'KUMPİR', 'ISLAK HAMBURGER'] },
+      { level: 2, title: 'Patatesten yapılır', words: ['PÜRE', 'CİPS', 'KROKET', 'PATATES KIZARTMASI'] },
+      { level: 3, title: 'Adını bir yerden alır', words: ['BOLONEZ', 'PARMESAN', 'ŞAMPANYA', 'KAŞMİR'] },
+    ],
+  },
+  {
+    id: 79,
+    groups: [
+      { level: 0, title: 'Dağcılık', words: ['İP', 'KAZMA', 'KASK', 'KRAMPON'] },
+      { level: 1, title: 'İş güvenliği', words: ['BARET', 'ELDİVEN', 'GÖZLÜK', 'YELEK'] },
+      { level: 2, title: 'Dünyanın ünlü dağları', words: ['EVEREST', 'KİLİMANJARO', 'FUJİ', 'MONT BLANC'] },
+      { level: 3, title: 'Sonu DAĞ ile biter', words: ['TEKİRDAĞ', 'KARADAĞ', 'ULUDAĞ', 'KAZDAĞ'] },
+    ],
+  },
+  {
+    id: 80,
+    groups: [
+      { level: 0, title: 'Yağ çeşitleri', words: ['ZEYTİNYAĞI', 'AYÇİÇEK', 'MISIRÖZÜ', 'SUSAM'] },
+      { level: 1, title: 'Sütten yapılır', words: ['TEREYAĞI', 'YOĞURT', 'PEYNİR', 'KEFİR'] },
+      { level: 2, title: 'Balıkesir ilçeleri', words: ['AYVALIK', 'EDREMİT', 'BANDIRMA', 'GÖNEN'] },
+      { level: 3, title: 'İçinde bir meyve saklı', words: ['ELMADAĞ', 'ARMUTLU', 'NARLIDERE', 'KİRAZLI'] },
+    ],
+  },
+  {
+    id: 81,
+    groups: [
+      { level: 0, title: 'Köpek ırkları', words: ['KANGAL', 'GOLDEN', 'PUDL', 'DALMAÇYALI'] },
+      { level: 1, title: 'Kedi ırkları', words: ['VAN KEDİSİ', 'ANKARA KEDİSİ', 'TEKİR', 'SİYAM'] },
+      { level: 2, title: 'Kafes kuşları', words: ['MUHABBET KUŞU', 'KANARYA', 'PAPAĞAN', 'SAKA'] },
+      { level: 3, title: 'Ünlü film ve çizgi film köpekleri', words: ['SCOOBY DOO', 'PLUTO', 'SNOOPY', 'LASSİE'] },
+    ],
+  },
+  {
+    id: 82,
+    groups: [
+      { level: 0, title: 'Tencere yemekleri', words: ['KURU FASULYE', 'TÜRLÜ', 'NOHUT', 'ETLİ BEZELYE'] },
+      { level: 1, title: 'Zeytinyağlılar', words: ['ENGİNAR', 'TAZE FASULYE', 'YAPRAK SARMA', 'BARBUNYA'] },
+      { level: 2, title: 'Pilav çeşitleri', words: ['BULGUR', 'İÇ PİLAV', 'ŞEHRİYELİ', 'NOHUTLU'] },
+      { level: 3, title: 'Adında bir kişi geçen yemekler', words: ['İMAM BAYILDI', 'HÜNKÂR BEĞENDİ', 'KADINBUDU', 'DİLBER DUDAĞI'] },
+    ],
+  },
+  {
+    id: 83,
+    groups: [
+      { level: 0, title: 'Doğal afetler', words: ['DEPREM', 'SEL', 'ÇIĞ', 'YANGIN'] },
+      { level: 1, title: 'Deprem çantasında', words: ['EL FENERİ', 'SU', 'İLAÇ', 'BATTANİYE'] },
+      { level: 2, title: 'Hakemin elinde', words: ['DÜDÜK', 'KART', 'KRONOMETRE', 'YAZI TURA PARASI'] },
+      { level: 3, title: 'SU ile başlar', words: ['SUBAY', 'SUSAM', 'SURAT', 'SUÇLU'] },
+    ],
+  },
+  {
+    id: 84,
+    groups: [
+      { level: 0, title: 'Taşınırken', words: ['KOLİ', 'BANT', 'BALONLU NAYLON', 'KAMYON'] },
+      { level: 1, title: 'İş makineleri', words: ['KEPÇE', 'VİNÇ', 'DOZER', 'GREYDER'] },
+      { level: 2, title: 'Kiracı olunca', words: ['KİRA', 'DEPOZİTO', 'TAPU', 'AİDAT'] },
+      { level: 3, title: 'Hayvan barınakları', words: ['KÜMES', 'AHIR', 'AĞIL', 'KULÜBE'] },
+    ],
+  },
+  {
+    id: 85,
+    groups: [
+      { level: 0, title: 'Kalem çeşitleri', words: ['TÜKENMEZ', 'DOLMA', 'KEÇELİ', 'VERSATİL'] },
+      { level: 1, title: 'Metaller', words: ['DEMİR', 'BAKIR', 'ALÜMİNYUM', 'KURŞUN'] },
+      { level: 2, title: 'Gazlar', words: ['OKSİJEN', 'AZOT', 'HELYUM', 'NEON'] },
+      { level: 3, title: 'Değerli metaller', words: ['ALTIN', 'GÜMÜŞ', 'PLATİN', 'PALADYUM'] },
+    ],
+  },
+  {
+    id: 86,
+    groups: [
+      { level: 0, title: 'Su sporları', words: ['SÖRF', 'KÜREK', 'YELKEN', 'DALIŞ'] },
+      { level: 1, title: 'Balık tutarken', words: ['OLTA', 'YEM', 'MİSİNA', 'ZOKA'] },
+      { level: 2, title: 'İnternet bağlantısı', words: ['AĞ', 'MODEM', 'WİFİ', 'SUNUCU'] },
+      { level: 3, title: 'Ünlü Türk denizciler', words: ['BARBAROS', 'PİRİ REİS', 'TURGUT REİS', 'SEYDİ ALİ REİS'] },
+    ],
+  },
+  {
+    id: 87,
+    groups: [
+      { level: 0, title: 'Reçeli yapılır', words: ['KAYISI', 'GÜL', 'İNCİR', 'AYVA'] },
+      { level: 1, title: 'Kırmızı meyveler', words: ['ÇİLEK', 'VİŞNE', 'KİRAZ', 'AHUDUDU'] },
+      { level: 2, title: 'Kökü yenen sebzeler', words: ['HAVUÇ', 'TURP', 'PANCAR', 'ŞALGAM'] },
+      { level: 3, title: 'GÜL ile başlar', words: ['GÜLLAÇ', 'GÜLLE', 'GÜLHANE', 'GÜLÜMSEME'] },
+    ],
+  },
+  {
+    id: 88,
+    groups: [
+      { level: 0, title: 'Masal varlıkları', words: ['PERİ', 'DEV', 'CADI', 'CÜCE'] },
+      { level: 1, title: 'Pamuk Prenses masalında', words: ['AYNA', 'ZEHİRLİ ELMA', 'AVCI', 'YEDİ CÜCELER'] },
+      { level: 2, title: 'Harry Potter', words: ['HOGWARTS', 'ASA', 'QUİDDİTCH', 'HEDWİG'] },
+      { level: 3, title: 'DEV ile başlar', words: ['DEVE', 'DEVLET', 'DEVRİM', 'DEVAM'] },
+    ],
+  },
+  {
+    id: 89,
+    groups: [
+      { level: 0, title: 'Yağmurlu günde', words: ['ŞEMSİYE', 'ÇİZME', 'YAĞMURLUK', 'SU BİRİKİNTİSİ'] },
+      { level: 1, title: 'Bulut türleri', words: ['KÜMÜLÜS', 'SİRÜS', 'NİMBÜS', 'STRATUS'] },
+      { level: 2, title: 'Hava ölçüm aletleri', words: ['BAROMETRE', 'TERMOMETRE', 'ANEMOMETRE', 'HİGROMETRE'] },
+      { level: 3, title: 'Eski ölçü birimleri', words: ['ARŞIN', 'KARIŞ', 'ADIM', 'FERSAH'] },
+    ],
+  },
+  {
+    id: 90,
+    groups: [
+      { level: 0, title: 'Yılbaşı', words: ['ÇAM AĞACI', 'HİNDİ', 'HAVAİ FİŞEK', 'GERİ SAYIM'] },
+      { level: 1, title: 'Şans oyunları', words: ['PİYANGO', 'LOTO', 'KAZI KAZAN', 'İDDAA'] },
+      { level: 2, title: 'Millî bayramlar', words: ['23 NİSAN', '19 MAYIS', '30 AĞUSTOS', '29 EKİM'] },
+      { level: 3, title: 'Kurtuluş Savaşı muharebeleri', words: ['SAKARYA', 'İNÖNÜ', 'DUMLUPINAR', 'KOCATEPE'] },
+    ],
+  },
+  {
+    id: 91,
+    groups: [
+      { level: 0, title: 'Sinemada', words: ['KOLTUK', 'BİLET', 'PATLAMIŞ MISIR', 'FRAGMAN'] },
+      { level: 1, title: 'Pencerede', words: ['PERDE', 'STOR', 'TÜL', 'PANJUR'] },
+      { level: 2, title: 'Yeşilçam yıldızları', words: ['TÜRKAN ŞOYLU', 'CÜNEYT ARKIN', 'HÜLYA KOÇYİĞİT', 'TARIK AKAN'] },
+      { level: 3, title: 'Yeşilçam filmleri', words: ['SELVİ BOYLUM', 'TOSUN PAŞA', 'SÜT KARDEŞLER', 'HABABAM SINIFI'] },
+    ],
+  },
+  {
+    id: 92,
+    groups: [
+      { level: 0, title: 'Video oyunlarında', words: ['SEVİYE', 'CAN', 'PUAN', 'REKOR'] },
+      { level: 1, title: 'Dizilerde', words: ['BÖLÜM', 'SEZON', 'FRAGMAN', 'JENERİK'] },
+      { level: 2, title: 'Üniversite sınavları', words: ['VİZE', 'FİNAL', 'BÜTÜNLEME', 'QUİZ'] },
+      { level: 3, title: 'CAN ile başlar', words: ['CANAVAR', 'CANBAZ', 'CANKURTARAN', 'CANSIZ'] },
+    ],
+  },
+  {
+    id: 93,
+    groups: [
+      { level: 0, title: 'Kesici aletler', words: ['BIÇAK', 'MAKAS', 'JİLET', 'BALTA'] },
+      { level: 1, title: 'Metnin parçaları', words: ['SATIR', 'PARAGRAF', 'CÜMLE', 'KELİME'] },
+      { level: 2, title: 'Noktalama işaretleri', words: ['NOKTA', 'VİRGÜL', 'ÜNLEM', 'SORU İŞARETİ'] },
+      { level: 3, title: 'Matematik işaretleri', words: ['ARTI', 'EKSİ', 'ÇARPI', 'BÖLÜ'] },
+    ],
+  },
+  {
+    id: 94,
+    groups: [
+      { level: 0, title: 'Kapadokya', words: ['PERİBACASI', 'SICAK HAVA BALONU', 'YERALTI ŞEHRİ', 'ÜRGÜP'] },
+      { level: 1, title: 'Antik kentler', words: ['EFES', 'TRUVA', 'AFRODİSİAS', 'BERGAMA'] },
+      { level: 2, title: 'Truva Savaşı', words: ['AŞİL', 'HEKTOR', 'HELEN', 'PARİS'] },
+      { level: 3, title: 'Yunan harfleri', words: ['ALFA', 'BETA', 'GAMA', 'DELTA'] },
+    ],
+  },
+  {
+    id: 95,
+    groups: [
+      { level: 0, title: 'Pazar yerinde', words: ['TEZGÂH', 'TERAZİ', 'PAZARCI', 'POŞET'] },
+      { level: 1, title: 'Mahkemede', words: ['HAKİM', 'SAVCI', 'AVUKAT', 'TANIK'] },
+      { level: 2, title: 'Tenis', words: ['FİLE', 'RAKET', 'SERVİS', 'KORT'] },
+      { level: 3, title: 'Tenis turnuvaları', words: ['WİMBLEDON', 'ROLAND GARROS', 'US OPEN', 'AUSTRALIAN OPEN'] },
+    ],
+  },
+  {
+    id: 96,
+    groups: [
+      { level: 0, title: 'Baharatlıkta', words: ['KARABİBER', 'PUL BİBER', 'KEKİK', 'NANE'] },
+      { level: 1, title: 'Türkiye gölleri', words: ['TUZ', 'VAN', 'BAFA', 'SAPANCA'] },
+      { level: 2, title: 'Biber çeşitleri', words: ['SİVRİ', 'DOLMALIK', 'ÇARLİSTON', 'KAPYA'] },
+      { level: 3, title: 'Önüne "acı" gelir', words: ['BADEM', 'SÖZ', 'KAYIP', 'HABER'] },
+    ],
+  },
+  {
+    id: 97,
+    groups: [
+      { level: 0, title: 'Bilim dalları', words: ['FİZİK', 'KİMYA', 'BİYOLOJİ', 'ASTRONOMİ'] },
+      { level: 1, title: 'Hücrenin yapısı', words: ['ZAR', 'SİTOPLAZMA', 'MİTOKONDRİ', 'RİBOZOM'] },
+      { level: 2, title: 'Çerezler', words: ['LEBLEBİ', 'ÇEKİRDEK', 'KURU ÜZÜM', 'FISTIK'] },
+      { level: 3, title: 'Ölçü aletleri', words: ['CETVEL', 'TERAZİ', 'TERMOMETRE', 'KRONOMETRE'] },
+    ],
+  },
+  {
+    id: 98,
+    groups: [
+      { level: 0, title: 'Telli çalgılar', words: ['GİTAR', 'KEMAN', 'UD', 'SAZ'] },
+      { level: 1, title: 'Hukuk metinleri', words: ['KANUN', 'ANAYASA', 'YÖNETMELİK', 'GENELGE'] },
+      { level: 2, title: 'Orkestrada', words: ['BATON', 'PARTİSYON', 'KONSER', 'SOLİST'] },
+      { level: 3, title: 'Restoran mutfağında', words: ['ŞEF', 'KOMİ', 'GARSON', 'BULAŞIKÇI'] },
+    ],
+  },
+  {
+    id: 99,
+    groups: [
+      { level: 0, title: 'Gülme çeşitleri', words: ['KIKIRDAMAK', 'KAHKAHA', 'SIRITMAK', 'TEBESSÜM'] },
+      { level: 1, title: 'Konuşma biçimleri', words: ['FISILDAMAK', 'BAĞIRMAK', 'MIRILDANMAK', 'KEKELEMEK'] },
+      { level: 2, title: 'Hayvan sesi fiilleri', words: ['HAVLAMAK', 'MİYAVLAMAK', 'KİŞNEMEK', 'ÖTMEK'] },
+      { level: 3, title: 'Fıkra kahramanları', words: ['TEMEL', 'DURSUN', 'NASREDDİN HOCA', 'BEKRİ MUSTAFA'] },
+    ],
+  },
+  {
+    id: 100,
+    groups: [
+      { level: 0, title: 'Coğrafi bölgeler', words: ['MARMARA', 'EGE', 'AKDENİZ', 'KARADENİZ'] },
+      { level: 1, title: 'Adalar', words: ['BÜYÜKADA', 'BOZCAADA', 'GÖKÇEADA', 'CUNDA'] },
+      { level: 2, title: 'Akdeniz Bölgesi illeri', words: ['ANTALYA', 'MERSİN', 'ADANA', 'HATAY'] },
+      { level: 3, title: 'İçinde ADA saklı', words: ['ADALET', 'KADAYIF', 'MADALYA', 'BADANA'] },
     ],
   },
 ];
