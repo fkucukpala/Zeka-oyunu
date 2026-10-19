@@ -12,8 +12,10 @@ Android öncelikli olarak Expo (React Native + TypeScript) ile yazıldı.
 - İstatistikler: oynanan, kazanma oranı, güncel ve en uzun seri, hata dağılımı
 - İlerleme cihazda saklanır (AsyncStorage); oyuna kaldığın yerden devam edilir
 - Karanlık tema (sistemi takip eder, ana sayfadan Sistem / Açık / Koyu seçilebilir)
-- **İpucu:** çözülmemiş en kolay grubun konusunu açar; yeni oyuncuya 3 hediye, sonrası Google Play'den satın alınır
-- **Reklam:** her bulmaca bitince, sonuç göründükten sonra geçiş reklamı (AdMob, en az 90 sn arayla)
+- **İpucu:** çözülmemiş en kolay grubun konusunu açar; yeni oyuncuya 3 hediye
+- **Gelir:** bulmaca sonu geçiş reklamı (ilk 2 bulmacada yok, en az 90 sn arayla), ödüllü reklamla ipucu,
+  Google Play'den ipucu paketleri ve tek seferlik "Reklamları kaldır"
+- **Geri dönüş:** günlük hatırlatma bildirimi (ilk bulmaca sonunda teklif edilir), 3. galibiyetten sonra Play puanlama isteği
 
 ## Android'de deneme
 
@@ -45,16 +47,19 @@ Kod şu an Google'ın **test** reklam kimlikleriyle gelir; gerçek gelir için:
 
 1. **AdMob:** [admob.google.com](https://admob.google.com)'da uygulama ve bir "Geçiş (interstitial)" reklam birimi oluştur.
    - Uygulama kimliğini (`ca-app-pub-…~…`) `app.json` > `plugins` > `react-native-google-mobile-ads` > `androidAppId` alanına yaz.
-   - Reklam birimi kimliğini (`ca-app-pub-…/…`) `src/config.ts` > `INTERSTITIAL_IDS.android` alanına yaz.
+   - Bir "Geçiş" ve bir "Ödüllü" reklam birimi oluştur; kimliklerini (`ca-app-pub-…/…`) `src/config.ts` > `AD_UNITS.android` alanına yaz.
    - AdMob > Gizlilik ve mesajlaşma bölümünden GDPR izin mesajını oluştur (uygulama, formu açılışta otomatik gösterir).
-2. **Google Play ipucu paketleri:** Play Console > Uygulama içi ürünler'de `ipucu_5`, `ipucu_15`, `ipucu_40`
-   kimlikli **tüketilebilir** ürünler oluştur ve fiyatlarını belirle (kimlikler `src/config.ts` içinde).
+2. **Google Play ürünleri:** Play Console > Uygulama içi ürünler'de `ipucu_5`, `ipucu_15`, `ipucu_40`
+   (**tüketilebilir**) ve `reklamsiz` (**tek seferlik**) ürünlerini oluştur ve fiyatlarını belirle
+   (kimlikler `src/config.ts` içinde).
    Satın almalar yalnızca Play'e yüklenmiş (dahili test kanalı yeterli) bir sürümde çalışır.
 3. **Play Console zorunlulukları:** gizlilik politikası bağlantısı, "Reklam içerir" beyanı ve Veri güvenliği formu
    (AdMob reklam kimliği topladığı için).
 
 > Not: İpucu bakiyesi cihazda tutulur ve satın almalar sunucuda doğrulanmaz. Başlangıç için yeterli; gelir
 > büyürse satın alma doğrulaması için bir sunucu eklemek önerilir.
+
+Mağaza sayfası metni, ekran görüntüsü önerileri ve yayın kontrol listesi: [docs/play-store.md](docs/play-store.md)
 
 ## Geliştirme
 
@@ -84,8 +89,9 @@ src/game.ts         Saf oyun mantığı (gün hesabı, tahmin değerlendirme, pa
 src/puzzles.ts      Bulmaca havuzu
 src/storage.ts      İlerleme, istatistik ve ipucu bakiyesi kaydı
 src/theme.tsx       Açık/koyu renk paletleri ve tema seçimi
-src/ads.ts          AdMob geçiş reklamı (web'de ads.web.ts ile kapalı)
-src/hints.tsx       İpucu bakiyesi ve Google Play satın alma akışı
-src/config.ts       Reklam kimlikleri, reklam sıklığı, ipucu paketleri
+src/ads.ts          AdMob geçiş ve ödüllü reklam (web'de ads.web.ts ile kapalı)
+src/store.tsx       İpucu bakiyesi, Google Play satın almaları, reklamsız paket
+src/engagement.ts   Günlük hatırlatma bildirimi ve Play puanlama isteği
+src/config.ts       Reklam kimlikleri, reklam sıklığı, ürünler ve diğer gelir ayarları
 tests/              Node test runner ile birim testleri
 ```

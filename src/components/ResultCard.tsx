@@ -5,6 +5,7 @@ import { Share, StyleSheet, Text, View } from 'react-native';
 import { guessLevels, shareText, type Puzzle } from '../game';
 import { levelColors, useThemedStyles, type Colors } from '../theme';
 import { Button } from './Button';
+import { ReminderOffer } from './ReminderOffer';
 
 interface Props {
   puzzle: Puzzle;
@@ -58,6 +59,8 @@ export function ResultCard({ puzzle, day, isToday, won, guesses, hintsUsed }: Pr
           </View>
         ))}
       </View>
+
+      <ReminderOffer />
 
       <Button label="Sonucu paylaş" variant="primary" onPress={share} style={styles.button} />
       <Button label="İstatistikler" onPress={() => router.push('/istatistik')} style={styles.button} />

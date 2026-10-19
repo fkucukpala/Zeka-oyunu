@@ -140,3 +140,33 @@ export async function grantPurchase(purchaseKey: string, hints: number): Promise
   await AsyncStorage.setItem(GRANTED_KEY, JSON.stringify([...granted, purchaseKey].slice(-200)));
   return next;
 }
+
+/** Ödüllü reklam gibi ücretsiz kaynaklardan ipucu ekler. */
+export async function addHints(n: number): Promise<number> {
+  const next = (await loadHintBalance()) + n;
+  await saveHintBalance(next);
+  return next;
+}
+
+// Basit evet/hayır bayrakları (reklamsız satın alındı mı, hatırlatma soruldu mu vb.).
+export type Flag = 'ads-removed' | 'reminder-asked' | 'reminder-on' | 'review-asked';
+
+export async function getFlag(flag: Flag): Promise<boolean> {
+  try {
+    return (await AsyncStorage.getItem(`baglanti:${flag}`)) === '1';
+  } catch {
+    return false;
+  }
+}
+
+export async function setFlag(flag: Flag, value: boolean): Promise<void> {
+  await AsyncStorage.setItem(`baglanti:${flag}`, value ? '1' : '0');
+}
+
+/** Bitirilen (kazanılan ya da kaybedilen) toplam bulmaca sayısını bir artırır, yeni değeri döner. */
+export async function bumpFinishedCount(): Promise<number> {
+  const key = 'baglanti:finished-count';
+  const next = (Number(await AsyncStorage.getItem(key)) || 0) + 1;
+  await AsyncStorage.setItem(key, String(next));
+  return next;
+}

@@ -4,9 +4,10 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button } from '../components/Button';
+import { disableReminder, enableReminder, remindersSupported } from '../engagement';
 import { dateForDay, dayNumber, type Level } from '../game';
-import { useHints } from '../hints';
-import { loadAllStatuses, loadStats, visibleStreak, type Status } from '../storage';
+import { useStore } from '../store';
+import { getFlag, loadAllStatuses, loadStats, visibleStreak, type Status } from '../storage';
 import { levelColors, useTheme, useThemedStyles, type Colors, type ThemePreference } from '../theme';
 
 const LOGO_LEVELS: Level[] = [0, 1, 2, 3];
@@ -19,16 +20,18 @@ const THEME_OPTIONS: { value: ThemePreference; label: string }[] = [
 export default function HomeScreen() {
   const styles = useThemedStyles(makeStyles);
   const { preference, setPreference } = useTheme();
-  const { balance } = useHints();
+  const { balance } = useStore();
   const today = dayNumber();
   const [status, setStatus] = useState<Status | undefined>();
   const [streak, setStreak] = useState(0);
+  const [reminderOn, setReminderOn] = useState(false);
 
   // Oyundan dönünce durum ve seri güncellensin diye her odaklanmada yeniden okunur.
   useFocusEffect(
     useCallback(() => {
       loadAllStatuses([today]).then((s) => setStatus(s[today]));
       loadStats().then((s) => setStreak(visibleStreak(s, today)));
+      getFlag('reminder-on').then(setReminderOn);
     }, [today]),
   );
 
@@ -58,6 +61,25 @@ export default function HomeScreen() {
           <Button label={`💡 İpuçları (${balance})`} onPress={() => router.push('/magaza')} />
           <Button label="Nasıl oynanır?" onPress={() => router.push('/nasil')} />
         </View>
+
+        {remindersSupported && (
+          <Pressable
+            accessibilityRole="switch"
+            accessibilityState={{ checked: reminderOn }}
+            onPress={async () => {
+              if (reminderOn) {
+                await disableReminder();
+                setReminderOn(false);
+              } else {
+                setReminderOn(await enableReminder());
+              }
+            }}
+            style={styles.reminderRow}
+          >
+            <Text style={styles.themeLabel}>🔔 Günlük hatırlatma</Text>
+            <Text style={styles.reminderValue}>{reminderOn ? 'Açık' : 'Kapalı'}</Text>
+          </Pressable>
+        )}
 
         <View style={styles.themeRow} accessibilityRole="radiogroup" accessibilityLabel="Tema">
           <Text style={styles.themeLabel}>Tema</Text>
@@ -96,6 +118,8 @@ const makeStyles = (c: Colors) =>
     buttons: { maxWidth: 360, width: '100%', marginTop: 28, gap: 12 },
     themeRow: { flexDirection: 'row', alignItems: 'center', gap: 12, marginTop: 28 },
     themeLabel: { fontSize: 15, color: c.muted },
+    reminderRow: { flexDirection: 'row', alignItems: 'center', gap: 10, marginTop: 24, minHeight: 44 },
+    reminderValue: { fontSize: 15, fontWeight: '700', color: c.text },
     segment: { flexDirection: 'row', borderRadius: 20, backgroundColor: c.tile, padding: 3 },
     segmentItem: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 17, minHeight: 36, justifyContent: 'center' },
     segmentActive: { backgroundColor: c.accent },

@@ -3,7 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 
 import { initAds } from '../ads';
-import { HintsProvider } from '../hints';
+import { StoreProvider } from '../store';
 import { ThemeProvider, useTheme } from '../theme';
 
 function AppStack() {
@@ -38,9 +38,9 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider>
-      <HintsProvider>
+      <StoreProvider>
         <AppStack />
-      </HintsProvider>
+      </StoreProvider>
     </ThemeProvider>
   );
 }

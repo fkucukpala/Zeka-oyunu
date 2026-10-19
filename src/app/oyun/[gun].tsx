@@ -2,7 +2,6 @@ import { router, Stack, useLocalSearchParams } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Animated, ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 
-import { showAdAfterPuzzle } from '../../ads';
 import { Button } from '../../components/Button';
 import { ResultCard } from '../../components/ResultCard';
 import { SolvedGroup } from '../../components/SolvedGroup';
@@ -18,9 +17,11 @@ import {
   shuffle,
   type Group,
 } from '../../game';
+import { showAdAfterPuzzle } from '../../ads';
+import { maybeAskForReview } from '../../engagement';
 import { errorHaptic, successHaptic, tapHaptic } from '../../haptics';
-import { useHints } from '../../hints';
 import { PUZZLES } from '../../puzzles';
+import { useStore } from '../../store';
 import { EMPTY_PROGRESS, loadProgress, recordFinish, saveProgress, type Progress } from '../../storage';
 import { levelColors, useThemedStyles, type Colors } from '../../theme';
 
@@ -29,7 +30,7 @@ const MAX_WIDTH = 520;
 
 export default function GameScreen() {
   const styles = useThemedStyles(makeStyles);
-  const hints = useHints();
+  const hints = useStore();
   const params = useLocalSearchParams<{ gun: string }>();
   const today = dayNumber();
   const day = Math.min(today, Math.max(1, Number(params.gun) || today));
@@ -123,7 +124,8 @@ export default function GameScreen() {
     await saveProgress(day, next);
     if (next.status !== 'playing') {
       await recordFinish(day, today, next.status === 'won', next.mistakes);
-      showAdAfterPuzzle();
+      // Puanlama penceresi açıldıysa aynı anda bir de reklam göstermeyelim.
+      if (!(next.status === 'won' && (await maybeAskForReview()))) await showAdAfterPuzzle();
     }
   };
 
@@ -241,7 +243,7 @@ export default function GameScreen() {
                 />
               </View>
               <Button
-                label={hints.balance > 0 ? `💡 İpucu al (${hints.balance} hakkın var)` : '💡 İpucu satın al'}
+                label={hints.balance > 0 ? `💡 İpucu al (${hints.balance} hakkın var)` : '💡 İpucu kazan (reklam izle veya satın al)'}
                 onPress={takeHint}
                 disabled={!hintLeft}
                 style={styles.hintButton}
