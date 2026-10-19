@@ -9,6 +9,8 @@ export interface Progress {
   solved: Level[];
   mistakes: number;
   status: Status;
+  /** İpucu olarak adı açılan grupların seviyeleri. */
+  hints: Level[];
 }
 
 export interface Stats {
@@ -24,8 +26,13 @@ export interface Stats {
 
 const progressKey = (day: number) => `baglanti:progress:${day}`;
 const STATS_KEY = 'baglanti:stats';
+const HINTS_KEY = 'baglanti:hints';
+const GRANTED_KEY = 'baglanti:granted-purchases';
 
-export const EMPTY_PROGRESS: Progress = { guesses: [], solved: [], mistakes: 0, status: 'playing' };
+/** Yeni oyuncuya hediye edilen ipucu sayısı. */
+export const WELCOME_HINTS = 3;
+
+export const EMPTY_PROGRESS: Progress = { guesses: [], solved: [], mistakes: 0, status: 'playing', hints: [] };
 
 export const EMPTY_STATS: Stats = {
   played: 0,
@@ -94,5 +101,42 @@ export async function recordFinish(day: number, today: number, won: boolean, mis
     next.currentStreak = 0;
   }
   await AsyncStorage.setItem(STATS_KEY, JSON.stringify(next));
+  return next;
+}
+
+export async function loadHintBalance(): Promise<number> {
+  try {
+    const raw = await AsyncStorage.getItem(HINTS_KEY);
+    return raw === null ? WELCOME_HINTS : Math.max(0, Number(raw) || 0);
+  } catch {
+    return WELCOME_HINTS;
+  }
+}
+
+async function saveHintBalance(n: number): Promise<void> {
+  await AsyncStorage.setItem(HINTS_KEY, String(n));
+}
+
+/** Bir ipucu harcar; bakiye yetersizse false döner. */
+export async function spendHint(): Promise<{ ok: boolean; balance: number }> {
+  const balance = await loadHintBalance();
+  if (balance <= 0) return { ok: false, balance };
+  await saveHintBalance(balance - 1);
+  return { ok: true, balance: balance - 1 };
+}
+
+/**
+ * Satın alınan ipuçlarını bakiyeye ekler. Aynı satın alma (token) ikinci kez
+ * gelirse — örneğin işlem tamamlanmadan uygulama kapanıp yeniden açılırsa —
+ * tekrar eklenmez.
+ */
+export async function grantPurchase(purchaseKey: string, hints: number): Promise<number> {
+  const raw = await AsyncStorage.getItem(GRANTED_KEY);
+  const granted: string[] = raw ? JSON.parse(raw) : [];
+  const balance = await loadHintBalance();
+  if (granted.includes(purchaseKey)) return balance;
+  const next = balance + hints;
+  await saveHintBalance(next);
+  await AsyncStorage.setItem(GRANTED_KEY, JSON.stringify([...granted, purchaseKey].slice(-200)));
   return next;
 }

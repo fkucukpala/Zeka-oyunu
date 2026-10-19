@@ -97,9 +97,27 @@ export function guessLevels(puzzle: Puzzle, guess: readonly string[]): Level[] {
 
 const EMOJI: Record<Level, string> = { 0: '🟨', 1: '🟩', 2: '🟦', 3: '🟪' };
 
-export function shareText(puzzle: Puzzle, day: number, guesses: readonly (readonly string[])[]): string {
+export function shareText(
+  puzzle: Puzzle,
+  day: number,
+  guesses: readonly (readonly string[])[],
+  hintsUsed = 0,
+): string {
   const rows = guesses.map((g) => guessLevels(puzzle, g).map((l) => EMOJI[l]).join(''));
-  return ['Bağlantı', `Bulmaca #${day}`, ...rows].join('\n');
+  const header = ['Bağlantı', `Bulmaca #${day}`];
+  if (hintsUsed > 0) header.push(`💡 ${hintsUsed} ipucu`);
+  return [...header, ...rows].join('\n');
+}
+
+/**
+ * Sıradaki ipucu: henüz çözülmemiş ve ipucu verilmemiş en kolay grup.
+ * Verilecek ipucu kalmadıysa null.
+ */
+export function nextHint(puzzle: Puzzle, solved: readonly Level[], hinted: readonly Level[]): Group | null {
+  const open = puzzle.groups
+    .filter((g) => !solved.includes(g.level) && !hinted.includes(g.level))
+    .sort((a, b) => a.level - b.level);
+  return open[0] ?? null;
 }
 
 /** Bulmaca verisindeki yapısal hataları döner (boş dizi = geçerli). */

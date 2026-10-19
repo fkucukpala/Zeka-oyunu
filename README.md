@@ -11,7 +11,9 @@ Android öncelikli olarak Expo (React Native + TypeScript) ile yazıldı.
 - Emoji ızgaralı **sonuç paylaşma** (WhatsApp, X vb.)
 - İstatistikler: oynanan, kazanma oranı, güncel ve en uzun seri, hata dağılımı
 - İlerleme cihazda saklanır (AsyncStorage); oyuna kaldığın yerden devam edilir
-- İnternet gerektirmez
+- Karanlık tema (sistemi takip eder, ana sayfadan Sistem / Açık / Koyu seçilebilir)
+- **İpucu:** çözülmemiş en kolay grubun konusunu açar; yeni oyuncuya 3 hediye, sonrası Google Play'den satın alınır
+- **Reklam:** her bulmaca bitince, sonuç göründükten sonra geçiş reklamı (AdMob, en az 90 sn arayla)
 
 ## Android'de deneme
 
@@ -21,6 +23,10 @@ npx expo start
 ```
 
 Telefona Play Store'dan **Expo Go** uygulamasını kur ve terminaldeki QR kodu okut.
+
+> Expo Go'da reklam ve satın alma **kapalıdır** (bu yerel modüller Expo Go'da yok); oyun, tema ve
+> hediye ipuçları çalışır. Reklam ve satın almayı denemek için bir geliştirme derlemesi gerekir:
+> `npx eas-cli@latest build -p android --profile development`
 
 ## APK / Play Store derlemesi (EAS)
 
@@ -32,6 +38,23 @@ npx eas-cli@latest build -p android --profile production   # Play Store için .a
 
 Paket adı: `com.fkucukpala.baglanti` (`app.json` içinde değiştirilebilir). Her yeni mağaza sürümünde
 `android.versionCode` değerini artır.
+
+## Para kazanma kurulumu (yayından önce)
+
+Kod şu an Google'ın **test** reklam kimlikleriyle gelir; gerçek gelir için:
+
+1. **AdMob:** [admob.google.com](https://admob.google.com)'da uygulama ve bir "Geçiş (interstitial)" reklam birimi oluştur.
+   - Uygulama kimliğini (`ca-app-pub-…~…`) `app.json` > `plugins` > `react-native-google-mobile-ads` > `androidAppId` alanına yaz.
+   - Reklam birimi kimliğini (`ca-app-pub-…/…`) `src/config.ts` > `INTERSTITIAL_IDS.android` alanına yaz.
+   - AdMob > Gizlilik ve mesajlaşma bölümünden GDPR izin mesajını oluştur (uygulama, formu açılışta otomatik gösterir).
+2. **Google Play ipucu paketleri:** Play Console > Uygulama içi ürünler'de `ipucu_5`, `ipucu_15`, `ipucu_40`
+   kimlikli **tüketilebilir** ürünler oluştur ve fiyatlarını belirle (kimlikler `src/config.ts` içinde).
+   Satın almalar yalnızca Play'e yüklenmiş (dahili test kanalı yeterli) bir sürümde çalışır.
+3. **Play Console zorunlulukları:** gizlilik politikası bağlantısı, "Reklam içerir" beyanı ve Veri güvenliği formu
+   (AdMob reklam kimliği topladığı için).
+
+> Not: İpucu bakiyesi cihazda tutulur ve satın almalar sunucuda doğrulanmaz. Başlangıç için yeterli; gelir
+> büyürse satın alma doğrulaması için bir sunucu eklemek önerilir.
 
 ## Geliştirme
 
@@ -55,10 +78,14 @@ gösterilir; havuz bitince başa döner, bu yüzden havuzu düzenli büyütmek g
 ## Proje yapısı
 
 ```
-src/app/            Ekranlar (Expo Router): ana sayfa, oyun/[gun], arşiv, istatistik, nasıl oynanır
+src/app/            Ekranlar (Expo Router): ana sayfa, oyun/[gun], arşiv, istatistik, nasıl oynanır, mağaza
 src/components/     Tile, SolvedGroup, ResultCard, Button
 src/game.ts         Saf oyun mantığı (gün hesabı, tahmin değerlendirme, paylaşım metni)
 src/puzzles.ts      Bulmaca havuzu
-src/storage.ts      İlerleme ve istatistik kaydı
+src/storage.ts      İlerleme, istatistik ve ipucu bakiyesi kaydı
+src/theme.tsx       Açık/koyu renk paletleri ve tema seçimi
+src/ads.ts          AdMob geçiş reklamı (web'de ads.web.ts ile kapalı)
+src/hints.tsx       İpucu bakiyesi ve Google Play satın alma akışı
+src/config.ts       Reklam kimlikleri, reklam sıklığı, ipucu paketleri
 tests/              Node test runner ile birim testleri
 ```

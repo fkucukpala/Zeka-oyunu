@@ -1,16 +1,25 @@
 import { router, useFocusEffect } from 'expo-router';
 import { useCallback, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button } from '../components/Button';
 import { dateForDay, dayNumber, type Level } from '../game';
+import { useHints } from '../hints';
 import { loadAllStatuses, loadStats, visibleStreak, type Status } from '../storage';
-import { colors, levelColors } from '../theme';
+import { levelColors, useTheme, useThemedStyles, type Colors, type ThemePreference } from '../theme';
 
 const LOGO_LEVELS: Level[] = [0, 1, 2, 3];
+const THEME_OPTIONS: { value: ThemePreference; label: string }[] = [
+  { value: 'system', label: 'Sistem' },
+  { value: 'light', label: 'Açık' },
+  { value: 'dark', label: 'Koyu' },
+];
 
 export default function HomeScreen() {
+  const styles = useThemedStyles(makeStyles);
+  const { preference, setPreference } = useTheme();
+  const { balance } = useHints();
   const today = dayNumber();
   const [status, setStatus] = useState<Status | undefined>();
   const [streak, setStreak] = useState(0);
@@ -28,7 +37,7 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView style={styles.screen}>
-      <View style={styles.content}>
+      <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.logo}>
           {LOGO_LEVELS.map((l) => (
             <View key={l} style={[styles.logoCell, { backgroundColor: levelColors[l] }]} />
@@ -46,21 +55,50 @@ export default function HomeScreen() {
           <Button label={playLabel} variant="primary" onPress={() => router.push(`/oyun/${today}`)} />
           <Button label="Arşiv" onPress={() => router.push('/arsiv')} />
           <Button label="İstatistikler" onPress={() => router.push('/istatistik')} />
+          <Button label={`💡 İpuçları (${balance})`} onPress={() => router.push('/magaza')} />
           <Button label="Nasıl oynanır?" onPress={() => router.push('/nasil')} />
         </View>
-      </View>
+
+        <View style={styles.themeRow} accessibilityRole="radiogroup" accessibilityLabel="Tema">
+          <Text style={styles.themeLabel}>Tema</Text>
+          <View style={styles.segment}>
+            {THEME_OPTIONS.map((o) => {
+              const active = o.value === preference;
+              return (
+                <Pressable
+                  key={o.value}
+                  accessibilityRole="radio"
+                  accessibilityState={{ checked: active }}
+                  onPress={() => setPreference(o.value)}
+                  style={[styles.segmentItem, active && styles.segmentActive]}
+                >
+                  <Text style={[styles.segmentText, active && styles.segmentTextActive]}>{o.label}</Text>
+                </Pressable>
+              );
+            })}
+          </View>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: colors.background },
-  content: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 24 },
-  logo: { flexDirection: 'row', flexWrap: 'wrap', width: 72, gap: 4, marginBottom: 16 },
-  logoCell: { width: 34, height: 34, borderRadius: 6 },
-  title: { fontSize: 40, fontWeight: '900', color: colors.text },
-  tagline: { fontSize: 17, color: colors.text, textAlign: 'center', marginTop: 8, maxWidth: 320 },
-  date: { fontSize: 15, color: colors.muted, marginTop: 24 },
-  streak: { fontSize: 16, fontWeight: '700', color: colors.text, marginTop: 6 },
-  buttons: { maxWidth: 360, width: '100%', marginTop: 28, gap: 12 },
-});
+const makeStyles = (c: Colors) =>
+  StyleSheet.create({
+    screen: { flex: 1, backgroundColor: c.background },
+    content: { flexGrow: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 24, paddingVertical: 24 },
+    logo: { flexDirection: 'row', flexWrap: 'wrap', width: 72, gap: 4, marginBottom: 16 },
+    logoCell: { width: 34, height: 34, borderRadius: 6 },
+    title: { fontSize: 40, fontWeight: '900', color: c.text },
+    tagline: { fontSize: 17, color: c.text, textAlign: 'center', marginTop: 8, maxWidth: 320 },
+    date: { fontSize: 15, color: c.muted, marginTop: 24 },
+    streak: { fontSize: 16, fontWeight: '700', color: c.text, marginTop: 6 },
+    buttons: { maxWidth: 360, width: '100%', marginTop: 28, gap: 12 },
+    themeRow: { flexDirection: 'row', alignItems: 'center', gap: 12, marginTop: 28 },
+    themeLabel: { fontSize: 15, color: c.muted },
+    segment: { flexDirection: 'row', borderRadius: 20, backgroundColor: c.tile, padding: 3 },
+    segmentItem: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 17, minHeight: 36, justifyContent: 'center' },
+    segmentActive: { backgroundColor: c.accent },
+    segmentText: { fontSize: 14, fontWeight: '600', color: c.text },
+    segmentTextActive: { color: c.onSelected },
+  });

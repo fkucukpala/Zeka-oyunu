@@ -4,15 +4,17 @@ import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { dateForDay, dayNumber } from '../game';
 import { loadAllStatuses, type Status } from '../storage';
-import { colors, levelColors } from '../theme';
+import { levelColors, useTheme, useThemedStyles, type Colors } from '../theme';
 
 const BADGE: Record<Status, { label: string; color: string }> = {
   won: { label: 'Çözüldü', color: levelColors[1] },
-  lost: { label: 'Çözülemedi', color: colors.border },
+  lost: { label: 'Çözülemedi', color: '#D9D4C5' },
   playing: { label: 'Devam ediyor', color: levelColors[0] },
 };
 
 export default function ArchiveScreen() {
+  const styles = useThemedStyles(makeStyles);
+  const { colors } = useTheme();
   const today = dayNumber();
   const days = useMemo(() => Array.from({ length: today }, (_, i) => today - i), [today]);
   const [statuses, setStatuses] = useState<Record<number, Status>>({});
@@ -55,19 +57,20 @@ export default function ArchiveScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  list: { flex: 1, backgroundColor: colors.background },
-  content: { padding: 16, gap: 10 },
-  item: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: 16,
-    borderRadius: 10,
-    backgroundColor: colors.tile,
-  },
-  title: { fontSize: 17, fontWeight: '700', color: colors.text },
-  date: { fontSize: 14, color: colors.muted, marginTop: 2 },
-  badge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12 },
-  badgeText: { fontSize: 13, fontWeight: '600', color: colors.text },
-});
+const makeStyles = (c: Colors) =>
+  StyleSheet.create({
+    list: { flex: 1, backgroundColor: c.background },
+    content: { padding: 16, gap: 10 },
+    item: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      padding: 16,
+      borderRadius: 10,
+      backgroundColor: c.tile,
+    },
+    title: { fontSize: 17, fontWeight: '700', color: c.text },
+    date: { fontSize: 14, color: c.muted, marginTop: 2 },
+    badge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12 },
+    badgeText: { fontSize: 13, fontWeight: '600', color: c.onLevel },
+  });

@@ -1,7 +1,8 @@
-import { Stack, useLocalSearchParams } from 'expo-router';
+import { router, Stack, useLocalSearchParams } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Animated, ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 
+import { showAdAfterPuzzle } from '../../ads';
 import { Button } from '../../components/Button';
 import { ResultCard } from '../../components/ResultCard';
 import { SolvedGroup } from '../../components/SolvedGroup';
@@ -11,20 +12,24 @@ import {
   dayNumber,
   evaluateGuess,
   MAX_MISTAKES,
+  nextHint,
   puzzleForDay,
   seededShuffle,
   shuffle,
   type Group,
 } from '../../game';
 import { errorHaptic, successHaptic, tapHaptic } from '../../haptics';
+import { useHints } from '../../hints';
 import { PUZZLES } from '../../puzzles';
 import { EMPTY_PROGRESS, loadProgress, recordFinish, saveProgress, type Progress } from '../../storage';
-import { colors } from '../../theme';
+import { levelColors, useThemedStyles, type Colors } from '../../theme';
 
 const GAP = 8;
 const MAX_WIDTH = 520;
 
 export default function GameScreen() {
+  const styles = useThemedStyles(makeStyles);
+  const hints = useHints();
   const params = useLocalSearchParams<{ gun: string }>();
   const today = dayNumber();
   const day = Math.min(today, Math.max(1, Number(params.gun) || today));
@@ -44,6 +49,8 @@ export default function GameScreen() {
 
   const [shake] = useState(() => new Animated.Value(0));
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Hızlı çift dokunuşta iki ipucu harcanmasın.
+  const hintBusy = useRef(false);
 
   useEffect(() => {
     let alive = true;
@@ -74,6 +81,14 @@ export default function GameScreen() {
     progress.status === 'lost'
       ? [...solvedGroups, ...puzzle.groups.filter((g) => !progress.solved.includes(g.level))]
       : solvedGroups;
+
+  // Çözülen grubun ipucu kartı artık gereksiz.
+  const openHints = finished
+    ? []
+    : progress.hints
+        .filter((l) => !progress.solved.includes(l))
+        .map((l) => puzzle.groups.find((g) => g.level === l)!);
+  const hintLeft = !finished && nextHint(puzzle, progress.solved, progress.hints) !== null;
 
   const showToast = (msg: string) => {
     if (toastTimer.current) clearTimeout(toastTimer.current);
@@ -108,6 +123,7 @@ export default function GameScreen() {
     await saveProgress(day, next);
     if (next.status !== 'playing') {
       await recordFinish(day, today, next.status === 'won', next.mistakes);
+      showAdAfterPuzzle();
     }
   };
 
@@ -135,6 +151,22 @@ export default function GameScreen() {
     if (mistakes >= MAX_MISTAKES) setSelected([]);
   };
 
+  const takeHint = async () => {
+    const group = nextHint(puzzle, progress.solved, progress.hints);
+    if (!group || finished || hintBusy.current) return;
+    hintBusy.current = true;
+    try {
+      if (hints.balance <= 0 || !(await hints.spend())) {
+        router.push('/magaza');
+        return;
+      }
+      tapHaptic();
+      await persist({ ...progress, hints: [...progress.hints, group.level] });
+    } finally {
+      hintBusy.current = false;
+    }
+  };
+
   const rows: string[][] = [];
   for (let i = 0; i < remaining.length; i += 4) rows.push(remaining.slice(i, i + 4));
 
@@ -148,6 +180,12 @@ export default function GameScreen() {
           <View style={{ gap: GAP }}>
             {shownGroups.map((g) => (
               <SolvedGroup key={g.level} group={g} height={rowHeight} animate={g.level === justSolved} />
+            ))}
+            {openHints.map((g) => (
+              <View key={g.level} style={[styles.hintCard, { borderLeftColor: levelColors[g.level] }]}>
+                <Text style={styles.hintLabel}>💡 Gruplardan biri</Text>
+                <Text style={styles.hintTitle}>{g.title.toLocaleUpperCase('tr-TR')}</Text>
+              </View>
             ))}
             {loaded && progress.status !== 'lost' && (
               <Animated.View style={{ gap: GAP, transform: [{ translateX: shake }] }}>
@@ -202,6 +240,12 @@ export default function GameScreen() {
                   style={styles.control}
                 />
               </View>
+              <Button
+                label={hints.balance > 0 ? `💡 İpucu al (${hints.balance} hakkın var)` : '💡 İpucu satın al'}
+                onPress={takeHint}
+                disabled={!hintLeft}
+                style={styles.hintButton}
+              />
             </>
           )}
 
@@ -212,6 +256,7 @@ export default function GameScreen() {
               isToday={day === today}
               won={progress.status === 'won'}
               guesses={progress.guesses}
+              hintsUsed={progress.hints.length}
             />
           )}
         </View>
@@ -220,25 +265,36 @@ export default function GameScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: colors.background },
-  content: { alignItems: 'center', paddingVertical: 16 },
-  hint: { textAlign: 'center', fontSize: 15, color: colors.text, marginBottom: 14 },
-  row: { flexDirection: 'row', justifyContent: 'space-between' },
-  toast: {
-    position: 'absolute',
-    top: -6,
-    alignSelf: 'center',
-    backgroundColor: colors.accent,
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: 8,
-  },
-  toastText: { color: colors.onSelected, fontWeight: '700', fontSize: 15 },
-  mistakes: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, marginTop: 20 },
-  mistakesLabel: { fontSize: 15, color: colors.text, marginRight: 4 },
-  dot: { width: 14, height: 14, borderRadius: 7, backgroundColor: colors.selected },
-  dotUsed: { backgroundColor: colors.border },
-  controls: { flexDirection: 'row', justifyContent: 'center', gap: 8, marginTop: 20 },
-  control: { flex: 1, paddingHorizontal: 8 },
-});
+const makeStyles = (c: Colors) =>
+  StyleSheet.create({
+    screen: { flex: 1, backgroundColor: c.background },
+    content: { alignItems: 'center', paddingVertical: 16 },
+    hint: { textAlign: 'center', fontSize: 15, color: c.text, marginBottom: 14 },
+    row: { flexDirection: 'row', justifyContent: 'space-between' },
+    hintCard: {
+      borderLeftWidth: 6,
+      borderRadius: 8,
+      backgroundColor: c.tile,
+      paddingVertical: 10,
+      paddingHorizontal: 14,
+    },
+    hintLabel: { fontSize: 13, color: c.muted },
+    hintTitle: { fontSize: 15, fontWeight: '800', color: c.text, marginTop: 2 },
+    toast: {
+      position: 'absolute',
+      top: -6,
+      alignSelf: 'center',
+      backgroundColor: c.accent,
+      paddingHorizontal: 16,
+      paddingVertical: 10,
+      borderRadius: 8,
+    },
+    toastText: { color: c.onSelected, fontWeight: '700', fontSize: 15 },
+    mistakes: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, marginTop: 20 },
+    mistakesLabel: { fontSize: 15, color: c.text, marginRight: 4 },
+    dot: { width: 14, height: 14, borderRadius: 7, backgroundColor: c.selected },
+    dotUsed: { backgroundColor: c.border },
+    controls: { flexDirection: 'row', justifyContent: 'center', gap: 8, marginTop: 20 },
+    control: { flex: 1, paddingHorizontal: 8 },
+    hintButton: { marginTop: 12, borderStyle: 'dashed' },
+  });

@@ -3,9 +3,11 @@ import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { dayNumber } from '../game';
 import { EMPTY_STATS, loadStats, visibleStreak, type Stats } from '../storage';
-import { colors, levelColors } from '../theme';
+import { levelColors, useTheme, useThemedStyles, type Colors } from '../theme';
 
 export default function StatsScreen() {
+  const styles = useThemedStyles(makeStyles);
+  const { colors } = useTheme();
   const [stats, setStats] = useState<Stats>(EMPTY_STATS);
 
   useEffect(() => {
@@ -43,7 +45,7 @@ export default function StatsScreen() {
                 { width: `${Math.max(8, (count / maxBar) * 100)}%`, backgroundColor: count ? levelColors[1] : colors.border },
               ]}
             >
-              <Text style={styles.barValue}>{count}</Text>
+              <Text style={[styles.barValue, count > 0 && styles.barValueOnLevel]}>{count}</Text>
             </View>
           </View>
         </View>
@@ -53,18 +55,20 @@ export default function StatsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: colors.background },
-  content: { padding: 20 },
-  tiles: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 28 },
-  tile: { alignItems: 'center', flex: 1 },
-  value: { fontSize: 30, fontWeight: '800', color: colors.text },
-  label: { fontSize: 12, color: colors.muted, textAlign: 'center', marginTop: 2 },
-  heading: { fontSize: 16, fontWeight: '700', color: colors.text, marginBottom: 12 },
-  barRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 8 },
-  barLabel: { width: 20, fontSize: 15, fontWeight: '600', color: colors.text },
-  barTrack: { flex: 1 },
-  bar: { height: 26, borderRadius: 4, justifyContent: 'center', alignItems: 'flex-end', paddingRight: 8 },
-  barValue: { fontSize: 13, fontWeight: '700', color: colors.text },
-  note: { fontSize: 13, color: colors.muted, marginTop: 16 },
-});
+const makeStyles = (c: Colors) =>
+  StyleSheet.create({
+    screen: { flex: 1, backgroundColor: c.background },
+    content: { padding: 20 },
+    tiles: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 28 },
+    tile: { alignItems: 'center', flex: 1 },
+    value: { fontSize: 30, fontWeight: '800', color: c.text },
+    label: { fontSize: 12, color: c.muted, textAlign: 'center', marginTop: 2 },
+    heading: { fontSize: 16, fontWeight: '700', color: c.text, marginBottom: 12 },
+    barRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 8 },
+    barLabel: { width: 20, fontSize: 15, fontWeight: '600', color: c.text },
+    barTrack: { flex: 1 },
+    bar: { height: 26, borderRadius: 4, justifyContent: 'center', alignItems: 'flex-end', paddingRight: 8 },
+    barValue: { fontSize: 13, fontWeight: '700', color: c.text },
+    barValueOnLevel: { color: c.onLevel },
+    note: { fontSize: 13, color: c.muted, marginTop: 16 },
+  });

@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react';
 import { Animated, StyleSheet, Text } from 'react-native';
 
 import type { Group } from '../game';
-import { colors, levelColors } from '../theme';
+import { levelColors, useThemedStyles, type Colors } from '../theme';
 
 export function SolvedGroup({ group, height, animate }: { group: Group; height: number; animate: boolean }) {
+  const styles = useThemedStyles(makeStyles);
   const [scale] = useState(() => new Animated.Value(animate ? 0.85 : 1));
 
   useEffect(() => {
@@ -28,13 +29,14 @@ export function SolvedGroup({ group, height, animate }: { group: Group; height: 
   );
 }
 
-const styles = StyleSheet.create({
-  box: {
-    borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 10,
-  },
-  title: { fontSize: 15, fontWeight: '800', color: colors.text },
-  words: { fontSize: 14, color: colors.text, textAlign: 'center', marginTop: 2 },
-});
+const makeStyles = (c: Colors) =>
+  StyleSheet.create({
+    box: {
+      borderRadius: 8,
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingHorizontal: 10,
+    },
+    title: { fontSize: 15, fontWeight: '800', color: c.onLevel },
+    words: { fontSize: 14, color: c.onLevel, textAlign: 'center', marginTop: 2 },
+  });

@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 import {
   dayNumber,
   evaluateGuess,
+  nextHint,
   puzzleForDay,
   seededShuffle,
   shareText,
@@ -57,4 +58,17 @@ test('shareText seviye emojilerini üretir', () => {
   const p = PUZZLES[0];
   const text = shareText(p, 7, [p.groups[0].words, p.groups[3].words]);
   assert.equal(text, 'Bağlantı\nBulmaca #7\n🟨🟨🟨🟨\n🟪🟪🟪🟪');
+});
+
+test('nextHint en kolay çözülmemiş ve ipucu verilmemiş grubu döner', () => {
+  const p = PUZZLES[0];
+  assert.equal(nextHint(p, [], [])?.level, 0);
+  assert.equal(nextHint(p, [0], [])?.level, 1);
+  assert.equal(nextHint(p, [0], [1])?.level, 2);
+  assert.equal(nextHint(p, [0, 1, 2], [3]), null);
+});
+
+test('shareText kullanılan ipucu sayısını yazar', () => {
+  const p = PUZZLES[0];
+  assert.equal(shareText(p, 3, [p.groups[1].words], 2), 'Bağlantı\nBulmaca #3\n💡 2 ipucu\n🟩🟩🟩🟩');
 });

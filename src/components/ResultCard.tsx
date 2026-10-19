@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Share, StyleSheet, Text, View } from 'react-native';
 
 import { guessLevels, shareText, type Puzzle } from '../game';
-import { colors, levelColors } from '../theme';
+import { levelColors, useThemedStyles, type Colors } from '../theme';
 import { Button } from './Button';
 
 interface Props {
@@ -12,6 +12,7 @@ interface Props {
   isToday: boolean;
   won: boolean;
   guesses: string[][];
+  hintsUsed: number;
 }
 
 function msUntilMidnight(): number {
@@ -26,7 +27,8 @@ function formatCountdown(ms: number): string {
   return `${pad(Math.floor(total / 3600))}:${pad(Math.floor((total % 3600) / 60))}:${pad(total % 60)}`;
 }
 
-export function ResultCard({ puzzle, day, isToday, won, guesses }: Props) {
+export function ResultCard({ puzzle, day, isToday, won, guesses, hintsUsed }: Props) {
+  const styles = useThemedStyles(makeStyles);
   const [left, setLeft] = useState(msUntilMidnight);
 
   useEffect(() => {
@@ -36,7 +38,7 @@ export function ResultCard({ puzzle, day, isToday, won, guesses }: Props) {
   }, [isToday]);
 
   const share = () => {
-    Share.share({ message: shareText(puzzle, day, guesses) }).catch(() => {});
+    Share.share({ message: shareText(puzzle, day, guesses, hintsUsed) }).catch(() => {});
   };
 
   return (
@@ -44,6 +46,7 @@ export function ResultCard({ puzzle, day, isToday, won, guesses }: Props) {
       <Text style={styles.title}>{won ? 'Tebrikler!' : 'Bir dahaki sefere!'}</Text>
       <Text style={styles.subtitle}>
         {won ? `Bulmaca #${day} çözüldü.` : `Bulmaca #${day} bu sefer çözülemedi.`}
+        {hintsUsed > 0 ? ` (${hintsUsed} ipucu)` : ''}
       </Text>
 
       <View style={styles.grid} accessibilityLabel="Tahmin geçmişi">
@@ -61,20 +64,22 @@ export function ResultCard({ puzzle, day, isToday, won, guesses }: Props) {
 
       {isToday && (
         <Text style={styles.countdown}>
-          Sonraki bulmaca: <Text style={{ fontWeight: '700' }}>{formatCountdown(left)}</Text>
+          Sonraki bulmaca: <Text style={styles.bold}>{formatCountdown(left)}</Text>
         </Text>
       )}
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  card: { alignItems: 'center', paddingVertical: 16 },
-  title: { fontSize: 24, fontWeight: '800', color: colors.text },
-  subtitle: { fontSize: 15, color: colors.muted, marginTop: 4, marginBottom: 14 },
-  grid: { gap: 4, marginBottom: 18 },
-  row: { flexDirection: 'row', gap: 4 },
-  square: { width: 28, height: 28, borderRadius: 5 },
-  button: { alignSelf: 'stretch', marginBottom: 10 },
-  countdown: { marginTop: 6, fontSize: 15, color: colors.muted },
-});
+const makeStyles = (c: Colors) =>
+  StyleSheet.create({
+    card: { alignItems: 'center', paddingVertical: 16 },
+    title: { fontSize: 24, fontWeight: '800', color: c.text },
+    subtitle: { fontSize: 15, color: c.muted, marginTop: 4, marginBottom: 14 },
+    grid: { gap: 4, marginBottom: 18 },
+    row: { flexDirection: 'row', gap: 4 },
+    square: { width: 28, height: 28, borderRadius: 5 },
+    button: { alignSelf: 'stretch', marginBottom: 10 },
+    countdown: { marginTop: 6, fontSize: 15, color: c.muted },
+    bold: { fontWeight: '700' },
+  });

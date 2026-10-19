@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text, type ViewStyle } from 'react-native';
 
-import { colors } from '../theme';
+import { useThemedStyles, type Colors } from '../theme';
 
 interface Props {
   label: string;
@@ -11,6 +11,7 @@ interface Props {
 }
 
 export function Button({ label, onPress, variant = 'outline', disabled, style }: Props) {
+  const styles = useThemedStyles(makeStyles);
   const primary = variant === 'primary';
   return (
     <Pressable
@@ -25,21 +26,23 @@ export function Button({ label, onPress, variant = 'outline', disabled, style }:
         style,
       ]}
     >
-      <Text style={[styles.label, primary && { color: colors.onSelected }]}>{label}</Text>
+      <Text style={[styles.label, primary && styles.primaryLabel]}>{label}</Text>
     </Pressable>
   );
 }
 
-const styles = StyleSheet.create({
-  base: {
-    minHeight: 48,
-    paddingHorizontal: 20,
-    borderRadius: 24,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  primary: { backgroundColor: colors.accent },
-  outline: { borderWidth: 1.5, borderColor: colors.accent, backgroundColor: 'transparent' },
-  disabled: { opacity: 0.35 },
-  label: { fontSize: 16, fontWeight: '600', color: colors.accent },
-});
+const makeStyles = (c: Colors) =>
+  StyleSheet.create({
+    base: {
+      minHeight: 48,
+      paddingHorizontal: 20,
+      borderRadius: 24,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    primary: { backgroundColor: c.accent },
+    outline: { borderWidth: 1.5, borderColor: c.accent, backgroundColor: 'transparent' },
+    disabled: { opacity: 0.35 },
+    label: { fontSize: 16, fontWeight: '600', color: c.accent },
+    primaryLabel: { color: c.onSelected },
+  });

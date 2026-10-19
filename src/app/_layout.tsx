@@ -1,12 +1,16 @@
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import { useEffect } from 'react';
 
-import { colors } from '../theme';
+import { initAds } from '../ads';
+import { HintsProvider } from '../hints';
+import { ThemeProvider, useTheme } from '../theme';
 
-export default function RootLayout() {
+function AppStack() {
+  const { colors, scheme } = useTheme();
   return (
     <>
-      <StatusBar style="dark" />
+      <StatusBar style={scheme === 'dark' ? 'light' : 'dark'} />
       <Stack
         screenOptions={{
           headerStyle: { backgroundColor: colors.background },
@@ -21,7 +25,22 @@ export default function RootLayout() {
         <Stack.Screen name="arsiv" options={{ title: 'Arşiv' }} />
         <Stack.Screen name="istatistik" options={{ title: 'İstatistikler', presentation: 'modal' }} />
         <Stack.Screen name="nasil" options={{ title: 'Nasıl oynanır?', presentation: 'modal' }} />
+        <Stack.Screen name="magaza" options={{ title: 'İpuçları', presentation: 'modal' }} />
       </Stack>
     </>
+  );
+}
+
+export default function RootLayout() {
+  useEffect(() => {
+    initAds();
+  }, []);
+
+  return (
+    <ThemeProvider>
+      <HintsProvider>
+        <AppStack />
+      </HintsProvider>
+    </ThemeProvider>
   );
 }

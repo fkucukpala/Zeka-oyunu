@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { Pressable, StyleSheet, Text } from 'react-native';
 
-import { colors } from '../theme';
+import { useTheme, useThemedStyles, type Colors } from '../theme';
 
 interface Props {
   word: string;
@@ -12,6 +12,8 @@ interface Props {
 }
 
 export const Tile = memo(function Tile({ word, selected, size, disabled, onPress }: Props) {
+  const { colors } = useTheme();
+  const styles = useThemedStyles(makeStyles);
   return (
     <Pressable
       accessibilityRole="button"
@@ -25,7 +27,7 @@ export const Tile = memo(function Tile({ word, selected, size, disabled, onPress
       ]}
     >
       <Text
-        style={[styles.text, selected && { color: colors.onSelected }]}
+        style={[styles.text, selected && styles.selectedText]}
         numberOfLines={word.includes(' ') ? 2 : 1}
         adjustsFontSizeToFit
         minimumFontScale={0.5}
@@ -36,17 +38,19 @@ export const Tile = memo(function Tile({ word, selected, size, disabled, onPress
   );
 });
 
-const styles = StyleSheet.create({
-  tile: {
-    borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 4,
-  },
-  text: {
-    fontSize: 15,
-    fontWeight: '700',
-    color: colors.text,
-    textAlign: 'center',
-  },
-});
+const makeStyles = (c: Colors) =>
+  StyleSheet.create({
+    tile: {
+      borderRadius: 8,
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingHorizontal: 4,
+    },
+    text: {
+      fontSize: 15,
+      fontWeight: '700',
+      color: c.text,
+      textAlign: 'center',
+    },
+    selectedText: { color: c.onSelected },
+  });
