@@ -3,6 +3,9 @@
 16 kelimeyi, ortak noktası olan 4'erli gruplara ayır. Her gün herkese aynı yeni bulmaca gelir; 4 hata hakkın var.
 Android öncelikli olarak Expo (React Native + TypeScript) ile yazıldı.
 
+> **Kotlin / Android Studio sürümü:** [`android-kotlin/`](android-kotlin/README.md) klasöründe aynı oyunun
+> Jetpack Compose ile yazılmış yerel Android karşılığı var. Bulmacalar iki sürümde ortaktır.
+
 ## Özellikler
 
 - **Bölüm sistemi:** her gün 10 bölüm hakkı (gece yarısı yenilenir); bitince ödüllü reklamla +5 hak.

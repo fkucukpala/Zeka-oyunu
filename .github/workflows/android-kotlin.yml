@@ -1,0 +1,41 @@
+name: Android (Kotlin)
+
+on:
+  push:
+    paths:
+      - "android-kotlin/**"
+      - "src/puzzles.ts"
+      - "scripts/export-puzzles.mjs"
+      - ".github/workflows/android-kotlin.yml"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Bulmaca JSON'u src/puzzles.ts ile güncel mi
+        run: |
+          node scripts/export-puzzles.mjs
+          git diff --exit-code android-kotlin/app/src/main/assets/puzzles.json
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Testler ve APK derlemesi
+        working-directory: android-kotlin
+        run: ./gradlew :core:test assembleDebug assembleRelease --stacktrace
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: baglanti-debug-apk
+          path: android-kotlin/app/build/outputs/apk/debug/app-debug.apk

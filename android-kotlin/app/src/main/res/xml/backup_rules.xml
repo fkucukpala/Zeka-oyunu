@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- İlerleme, seri ve ipuçları Google yedeğiyle yeni telefona taşınır. -->
+<full-backup-content>
+    <include domain="sharedpref" path="baglanti.xml" />
+</full-backup-content>
