@@ -13,7 +13,7 @@ Bağlantı: Kelime Bulmacası
 ## Kısa açıklama (en fazla 80 karakter)
 
 ```
-16 kelimeyi 4 gizli gruba ayır! 100 bölümlük Türkçe kelime ve zeka oyunu.
+16 kelimeyi 4 gizli gruba ayır! 200 bölümlük Türkçe kelime ve zeka oyunu.
 ```
 
 ## Tam açıklama
@@ -43,7 +43,7 @@ Bir grubun konusunu öğrenmek için ipucu kullan.
 Deyimler, şehirler, yemekler, Yeşilçam, futbol… Bulmacalar Türkiye'ye özel hazırlanır.
 
 ÖZELLİKLER
-• 100 bölüm, her gün 10 bölüm hakkı
+• 200 bölüm, her gün 10 bölüm hakkı
 • Tüm bölümlerini görebileceğin bölüm listesi
 • Karanlık tema
 • Günlük hatırlatma bildirimi
