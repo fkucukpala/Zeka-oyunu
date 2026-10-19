@@ -21,8 +21,8 @@ function AppStack() {
         }}
       >
         <Stack.Screen name="index" options={{ headerShown: false }} />
-        <Stack.Screen name="oyun/[gun]" options={{ title: 'Bağlantı' }} />
-        <Stack.Screen name="arsiv" options={{ title: 'Arşiv' }} />
+        <Stack.Screen name="bolum/[no]" options={{ title: 'Bağlantı' }} />
+        <Stack.Screen name="bolumler" options={{ title: 'Bölümler' }} />
         <Stack.Screen name="istatistik" options={{ title: 'İstatistikler', presentation: 'modal' }} />
         <Stack.Screen name="nasil" options={{ title: 'Nasıl oynanır?', presentation: 'modal' }} />
         <Stack.Screen name="magaza" options={{ title: 'İpuçları', presentation: 'modal' }} />

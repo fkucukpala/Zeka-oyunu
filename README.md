@@ -5,15 +5,16 @@ Android öncelikli olarak Expo (React Native + TypeScript) ile yazıldı.
 
 ## Özellikler
 
-- Günlük bulmaca (gece yarısı yenilenir) ve geçmiş bulmacalar için **Arşiv**
+- **Bölüm sistemi:** her gün 10 bölüm hakkı (gece yarısı yenilenir); bitince ödüllü reklamla +5 hak.
+  Yarım kalan bölüme dönmek hak harcamaz. Oynanan bölümler **Bölümler** listesinde
 - 4 zorluk rengi, "Bir eksik!" uyarısı, aynı tahmini tekrar etme koruması
 - Karıştır / Temizle / Gönder, titreşimli geri bildirim, sallanma ve açılma animasyonları
 - Emoji ızgaralı **sonuç paylaşma** (WhatsApp, X vb.)
-- İstatistikler: oynanan, kazanma oranı, güncel ve en uzun seri, hata dağılımı
+- İstatistikler: oynanan, kazanma oranı, gün bazlı seri (arka arkaya en az bir bölüm kazanılan gün), hata dağılımı
 - İlerleme cihazda saklanır (AsyncStorage); oyuna kaldığın yerden devam edilir
 - Karanlık tema (sistemi takip eder, ana sayfadan Sistem / Açık / Koyu seçilebilir)
 - **İpucu:** çözülmemiş en kolay grubun konusunu açar; yeni oyuncuya 3 hediye
-- **Gelir:** bulmaca sonu geçiş reklamı (ilk 2 bulmacada yok, en az 90 sn arayla), ödüllü reklamla ipucu,
+- **Gelir:** bölüm sonu geçiş reklamı (ilk 2 bölümde yok, en az 90 sn arayla), ödüllü reklamla hak ve ipucu,
   Google Play'den ipucu paketleri ve tek seferlik "Reklamları kaldır"
 - **Geri dönüş:** günlük hatırlatma bildirimi (ilk bulmaca sonunda teklif edilir), 3. galibiyetten sonra Play puanlama isteği
 
@@ -27,7 +28,8 @@ npx expo start
 Telefona Play Store'dan **Expo Go** uygulamasını kur ve terminaldeki QR kodu okut.
 
 > Expo Go'da reklam ve satın alma **kapalıdır** (bu yerel modüller Expo Go'da yok); oyun, tema ve
-> hediye ipuçları çalışır. Reklam ve satın almayı denemek için bir geliştirme derlemesi gerekir:
+> hediye ipuçları çalışır. Geliştirme modunda ödüllü reklam yerine "(test)" düğmesi anında ödül verir, böylece
+> hak/ipucu akışı bilgisayarda da denenebilir. Gerçek reklam ve satın alma için geliştirme derlemesi gerekir:
 > `npx eas-cli@latest build -p android --profile development`
 
 ## APK / Play Store derlemesi (EAS)
@@ -77,13 +79,14 @@ npm run lint
 - Kelimeler Türkçe büyük harfle (`İ`, `I` dikkat), bulmaca içinde tekrar etmemeli
 - İyi bulmacada bazı kelimeler başka bir gruba da uyuyormuş gibi görünür, ama çözüm tektir
 
-`npm test` yapısal hataları yakalar. Bulmacalar `START_DATE`'ten (`src/game.ts`) itibaren her gün bir tane
-gösterilir; havuz bitince başa döner, bu yüzden havuzu düzenli büyütmek gerekir.
+`npm test` yapısal hataları ve farklı bulmacalarda tekrar eden grupları yakalar. Bölüm N, havuzdaki N. bulmacadır;
+havuz bitince başa döner. Oyuncu günde 10+ bölüm oynayabildiği için havuzu düzenli büyütmek gerekir.
+Günlük hak ve reklam başına hak sayısı `src/config.ts` içindeki `DAILY_ENERGY` / `ENERGY_PER_AD` ile değişir.
 
 ## Proje yapısı
 
 ```
-src/app/            Ekranlar (Expo Router): ana sayfa, oyun/[gun], arşiv, istatistik, nasıl oynanır, mağaza
+src/app/            Ekranlar (Expo Router): ana sayfa, bolum/[no], bölümler, istatistik, nasıl oynanır, mağaza
 src/components/     Tile, SolvedGroup, ResultCard, Button
 src/game.ts         Saf oyun mantığı (gün hesabı, tahmin değerlendirme, paylaşım metni)
 src/puzzles.ts      Bulmaca havuzu

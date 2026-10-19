@@ -13,25 +13,25 @@ Bağlantı: Kelime Bulmacası
 ## Kısa açıklama (en fazla 80 karakter)
 
 ```
-16 kelimeyi 4 gizli gruba ayır! Her gün yeni Türkçe kelime ve zeka oyunu.
+16 kelimeyi 4 gizli gruba ayır! 100 bölümlük Türkçe kelime ve zeka oyunu.
 ```
 
 ## Tam açıklama
 
 ```
-Bağlantı, her gün yeni bir bulmacayla gelen Türkçe kelime ve zeka oyunudur.
+Bağlantı, bölüm bölüm ilerleyen Türkçe kelime ve zeka oyunudur.
 
 🧩 NASIL OYNANIR?
 Ekranda 16 kelime var. Bunları ortak noktası olan 4'erli gruplara ayır. Kolay mı sandın?
 Bazı kelimeler birden fazla gruba uyuyor gibi görünür ama tek doğru çözüm vardır.
 4 hata hakkın var; 3 kelimen doğruysa "Bir eksik!" uyarısı seni yönlendirir.
 
-🗓️ HER GÜN YENİ BULMACA
-Her gece yarısı herkes aynı yeni bulmacayı alır. Arkadaşlarınla aynı bulmacayı çöz,
-kim daha az hatayla bitirmiş karşılaştırın.
+🗓️ HER GÜN 10 BÖLÜM
+Her gün 10 bölüm hakkın yenilenir. Doyamadıysan kısa bir reklam izle, 5 bölüm daha oyna!
+Herkes aynı sırayla ilerler: arkadaşlarınla aynı bölümü çözün, kim daha az hata yapmış karşılaştırın.
 
 🔥 SERİNİ KORU
-Her gün çözdükçe serin uzar. İstatistiklerinden kazanma oranını ve en uzun serini takip et.
+Her gün en az bir bölüm çözdükçe serin uzar. İstatistiklerinden kazanma oranını ve en uzun serini takip et.
 
 📤 SONUCUNU PAYLAŞ
 Cevapları ele vermeden, renkli kareli sonucunu WhatsApp'ta ve sosyal medyada paylaş.
@@ -43,15 +43,15 @@ Bir grubun konusunu öğrenmek için ipucu kullan.
 Deyimler, şehirler, yemekler, Yeşilçam, futbol… Bulmacalar Türkiye'ye özel hazırlanır.
 
 ÖZELLİKLER
-• Her gün yeni kelime bulmacası
-• Kaçırdığın günler için arşiv
+• 100 bölüm, her gün 10 bölüm hakkı
+• Tüm bölümlerini görebileceğin bölüm listesi
 • Karanlık tema
 • Günlük hatırlatma bildirimi
 • İnternet olmadan da oynanır
 • Kısa: günde 2-5 dakika, beyin jimnastiği için ideal
 
 Kelime oyunlarını, bulmacaları ve zeka oyunlarını seviyorsan Bağlantı'yı hemen indir,
-bugünün bulmacasını çöz!
+ilk bölümü çöz!
 ```
 
 ## Kategori ve etiketler
@@ -65,7 +65,7 @@ bugünün bulmacasını çöz!
 1. Oyun tahtası, üstte büyük yazı: **"16 kelime, 4 gizli grup"**
 2. Renkli çözülmüş gruplar: **"Bağlantıyı bul!"**
 3. Tuzak kelime vurgusu: **"Dikkat: bazı kelimeler yanıltır"**
-4. Sonuç ekranı + seri: **"Her gün yeni bulmaca, serini koru 🔥"**
+4. Sonuç ekranı + seri: **"Her gün 10 bölüm, serini koru 🔥"**
 5. Karanlık tema: **"Gece de göz yormaz"**
 
 ## Yayın sonrası gelir kontrol listesi

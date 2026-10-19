@@ -21,7 +21,8 @@ export type GuessResult =
 
 export const MAX_MISTAKES = 4;
 
-// 1 numaralı günlük bulmacanın yayınlandığı gün (yerel saat).
+// Gün sayacının başladığı tarih (yerel saat). Günlük hakların yenilenmesi ve seri hesabı
+// bu sayaçla yapılır; yalnızca iki gün arasındaki farkın önemi var.
 export const START_DATE = new Date(2026, 9, 19);
 
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -30,7 +31,7 @@ function localMidnightUTC(d: Date): number {
   return Date.UTC(d.getFullYear(), d.getMonth(), d.getDate());
 }
 
-/** Bugünün bulmaca numarası (1'den başlar). Başlangıçtan önceyse 1 döner. */
+/** Bugünün gün numarası (1'den başlar). Başlangıçtan önceyse 1 döner. */
 export function dayNumber(now: Date = new Date()): number {
   const diff = Math.floor((localMidnightUTC(now) - localMidnightUTC(START_DATE)) / DAY_MS);
   return Math.max(1, diff + 1);
@@ -40,11 +41,12 @@ export function dateForDay(day: number): Date {
   return new Date(START_DATE.getFullYear(), START_DATE.getMonth(), START_DATE.getDate() + day - 1);
 }
 
-export function puzzleForDay<T>(puzzles: readonly T[], day: number): T {
-  return puzzles[(day - 1) % puzzles.length];
+/** Bölüm numarasına (1'den başlar) karşılık gelen bulmaca; havuz bitince başa döner. */
+export function puzzleForLevel<T>(puzzles: readonly T[], level: number): T {
+  return puzzles[(level - 1) % puzzles.length];
 }
 
-/** Tohumlu karıştırma: herkes aynı günde aynı dizilişi görsün diye. */
+/** Tohumlu karıştırma: herkes aynı bölümde aynı dizilişi görsün diye. */
 export function seededShuffle<T>(items: readonly T[], seed: number): T[] {
   const out = items.slice();
   let s = seed >>> 0 || 1;
@@ -99,12 +101,12 @@ const EMOJI: Record<Level, string> = { 0: '🟨', 1: '🟩', 2: '🟦', 3: '🟪
 
 export function shareText(
   puzzle: Puzzle,
-  day: number,
+  level: number,
   guesses: readonly (readonly string[])[],
   hintsUsed = 0,
 ): string {
   const rows = guesses.map((g) => guessLevels(puzzle, g).map((l) => EMOJI[l]).join(''));
-  const header = ['Bağlantı', `Bulmaca #${day}`];
+  const header = ['Bağlantı', `Bölüm ${level}`];
   if (hintsUsed > 0) header.push(`💡 ${hintsUsed} ipucu`);
   return [...header, ...rows].join('\n');
 }
@@ -136,4 +138,45 @@ export function validatePuzzle(p: Puzzle): string[] {
     if (w.trim() !== w || w.length === 0) errors.push(`#${p.id}: boşluk hatası "${w}"`);
   }
   return errors;
+}
+
+/** Günlük hak durumu: hangi gün için kaç hak kaldığı. */
+export interface Energy {
+  day: number;
+  left: number;
+}
+
+/** Kayıtlı hak durumunu bugüne göre yorumlar: yeni bir gün başladıysa haklar yenilenir. */
+export function energyForToday(saved: Energy | null, today: number, daily: number): Energy {
+  if (!saved || saved.day !== today) return { day: today, left: daily };
+  return { day: today, left: Math.max(0, saved.left) };
+}
+
+export interface Stats {
+  played: number;
+  won: number;
+  /** Arka arkaya en az bir bölüm kazanılan gün sayısı. */
+  currentStreak: number;
+  maxStreak: number;
+  /** Seri hesabı için son kazanılan günün numarası. */
+  lastWonDay: number;
+  /** Kazanılan bölümlerde yapılan hata sayısına göre dağılım (0..3). */
+  distribution: number[];
+}
+
+/**
+ * Bir bölüm bittiğinde istatistikleri günceller. Seri gün bazlıdır: aynı gün birden çok
+ * bölüm kazanmak seriyi bir kez artırır; kaybetmek seriyi bozmaz, bir günü boş geçmek bozar.
+ */
+export function applyFinish(s: Stats, today: number, won: boolean, mistakes: number): Stats {
+  const next: Stats = { ...s, distribution: [...s.distribution], played: s.played + 1 };
+  if (!won) return next;
+  next.won += 1;
+  next.distribution[Math.min(mistakes, MAX_MISTAKES - 1)] += 1;
+  if (s.lastWonDay !== today) {
+    next.currentStreak = s.lastWonDay === today - 1 ? s.currentStreak + 1 : 1;
+    next.lastWonDay = today;
+  }
+  next.maxStreak = Math.max(s.maxStreak, next.currentStreak);
+  return next;
 }

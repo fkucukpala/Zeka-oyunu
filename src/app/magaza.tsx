@@ -34,7 +34,7 @@ export default function ShopScreen() {
 
       {store.rewardedReady && (
         <Button
-          label={watching ? 'Reklam açılıyor…' : `🎬 Reklam izle, ${HINTS_PER_REWARDED_AD} ipucu kazan`}
+          label={watching ? 'Reklam açılıyor…' : `🎬 Reklam izle, ${HINTS_PER_REWARDED_AD} ipucu kazan${store.adsSimulated ? ' (test)' : ''}`}
           variant="primary"
           onPress={watch}
           disabled={watching}

@@ -1,9 +1,18 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 
 import { isRewardedReady, onRewardedReadyChange, setAdsRemoved, showRewarded } from './ads';
-import { HINT_PRODUCTS, HINTS_PER_REWARDED_AD, REMOVE_ADS_PRODUCT } from './config';
-import { loadNative } from './native';
-import { addHints, getFlag, grantPurchase, loadHintBalance, setFlag, spendHint } from './storage';
+import { DAILY_ENERGY, ENERGY_PER_AD, HINT_PRODUCTS, HINTS_PER_REWARDED_AD, REMOVE_ADS_PRODUCT } from './config';
+import { hasNativeModules, loadNative } from './native';
+import {
+  addEnergy,
+  addHints,
+  getFlag,
+  grantPurchase,
+  loadEnergy,
+  loadHintBalance,
+  setFlag,
+  spendHint,
+} from './storage';
 
 type IapLib = typeof import('expo-iap');
 type Purchase = import('expo-iap').Purchase;
@@ -16,6 +25,10 @@ export interface ShopProduct {
 
 interface StoreState {
   balance: number;
+  /** Bugün kalan bölüm hakkı. */
+  energy: number;
+  /** Geliştirme modunda (web/Expo Go) reklam yerine anında ödül verilir; arayüz bunu "test" diye belirtir. */
+  adsSimulated: boolean;
   adsRemoved: boolean;
   /** Mağaza bu derlemede ve cihazda kullanılabilir mi (Expo Go/web'de değil). */
   storeAvailable: boolean;
@@ -30,6 +43,9 @@ interface StoreState {
   restore: () => Promise<void>;
   /** Ödüllü reklam izletir; ödül kazanıldıysa true. */
   watchAdForHint: () => Promise<boolean>;
+  watchAdForEnergy: () => Promise<boolean>;
+  /** Hak bilgisini depodan yeniden okur (gün değişmiş olabilir). */
+  refreshEnergy: () => Promise<void>;
 }
 
 const StoreContext = createContext<StoreState | null>(null);
@@ -37,16 +53,25 @@ const StoreContext = createContext<StoreState | null>(null);
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const iap: IapLib | null = loadNative(() => require('expo-iap') as IapLib);
 
+// Reklam modülü olmayan geliştirme ortamında (web, Expo Go) akış test edilebilsin diye
+// reklam izlenmiş sayılır. Gerçek (yayın) derlemede __DEV__ false olduğundan devreye girmez.
+const SIMULATE_ADS = __DEV__ && !hasNativeModules;
+
+async function earnReward(): Promise<boolean> {
+  return SIMULATE_ADS ? true : showRewarded();
+}
+
 const hintsFor = (productId: string) => HINT_PRODUCTS.find((p) => p.id === productId)?.hints ?? 0;
 const ALL_SKUS = [...HINT_PRODUCTS.map((p) => p.id), REMOVE_ADS_PRODUCT];
 
 export function StoreProvider({ children }: { children: ReactNode }) {
   const [balance, setBalance] = useState(0);
+  const [energy, setEnergy] = useState(DAILY_ENERGY);
   const [adsRemoved, setAdsRemovedState] = useState(false);
   const [connected, setConnected] = useState(false);
   const [hintPacks, setHintPacks] = useState<ShopProduct[]>([]);
   const [removeAdsPrice, setRemoveAdsPrice] = useState<string | null>(null);
-  const [rewardedReady, setRewardedReady] = useState(isRewardedReady);
+  const [rewardedReady, setRewardedReady] = useState(() => SIMULATE_ADS || isRewardedReady());
   const [buying, setBuying] = useState<string | null>(null);
   const [lastError, setLastError] = useState<string | null>(null);
 
@@ -77,10 +102,12 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     loadHintBalance().then(setBalance);
+    loadEnergy().then((e) => setEnergy(e.left));
     getFlag('ads-removed').then((v) => {
       setAdsRemoved(v);
       setAdsRemovedState(v);
     });
+    if (SIMULATE_ADS) return;
     return onRewardedReadyChange(setRewardedReady);
   }, []);
 
@@ -160,14 +187,26 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   }, [handlePurchase]);
 
   const watchAdForHint = useCallback(async () => {
-    const earned = await showRewarded();
+    const earned = await earnReward();
     if (earned) setBalance(await addHints(HINTS_PER_REWARDED_AD));
     return earned;
+  }, []);
+
+  const watchAdForEnergy = useCallback(async () => {
+    const earned = await earnReward();
+    if (earned) setEnergy((await addEnergy(ENERGY_PER_AD)).left);
+    return earned;
+  }, []);
+
+  const refreshEnergy = useCallback(async () => {
+    setEnergy((await loadEnergy()).left);
   }, []);
 
   const value = useMemo<StoreState>(
     () => ({
       balance,
+      energy,
+      adsSimulated: SIMULATE_ADS,
       adsRemoved,
       storeAvailable: !!iap && connected,
       hintPacks,
@@ -179,8 +218,26 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       buy,
       restore,
       watchAdForHint,
+      watchAdForEnergy,
+      refreshEnergy,
     }),
-    [balance, adsRemoved, connected, hintPacks, removeAdsPrice, rewardedReady, buying, lastError, spend, buy, restore, watchAdForHint],
+    [
+      balance,
+      energy,
+      adsRemoved,
+      connected,
+      hintPacks,
+      removeAdsPrice,
+      rewardedReady,
+      buying,
+      lastError,
+      spend,
+      buy,
+      restore,
+      watchAdForHint,
+      watchAdForEnergy,
+      refreshEnergy,
+    ],
   );
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;

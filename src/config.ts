@@ -48,3 +48,9 @@ export const HINT_PRODUCTS = [
 ] as const;
 
 export const REMOVE_ADS_PRODUCT = 'reklamsiz';
+
+/** Her gün yenilenen bölüm hakkı. */
+export const DAILY_ENERGY = 10;
+
+/** Ödüllü reklam başına verilen bölüm hakkı. */
+export const ENERGY_PER_AD = 5;

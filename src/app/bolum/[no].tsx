@@ -3,16 +3,16 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Animated, ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 
 import { Button } from '../../components/Button';
+import { EnergyEmpty } from '../../components/EnergyEmpty';
 import { ResultCard } from '../../components/ResultCard';
 import { SolvedGroup } from '../../components/SolvedGroup';
 import { Tile } from '../../components/Tile';
 import {
   allWords,
-  dayNumber,
   evaluateGuess,
   MAX_MISTAKES,
   nextHint,
-  puzzleForDay,
+  puzzleForLevel,
   seededShuffle,
   shuffle,
   type Group,
@@ -22,7 +22,15 @@ import { maybeAskForReview } from '../../engagement';
 import { errorHaptic, successHaptic, tapHaptic } from '../../haptics';
 import { PUZZLES } from '../../puzzles';
 import { useStore } from '../../store';
-import { EMPTY_PROGRESS, loadProgress, recordFinish, saveProgress, type Progress } from '../../storage';
+import {
+  advanceLevel,
+  EMPTY_PROGRESS,
+  loadCurrentLevel,
+  openLevel,
+  recordFinish,
+  saveProgress,
+  type Progress,
+} from '../../storage';
 import { levelColors, useThemedStyles, type Colors } from '../../theme';
 
 const GAP = 8;
@@ -31,10 +39,10 @@ const MAX_WIDTH = 520;
 export default function GameScreen() {
   const styles = useThemedStyles(makeStyles);
   const hints = useStore();
-  const params = useLocalSearchParams<{ gun: string }>();
-  const today = dayNumber();
-  const day = Math.min(today, Math.max(1, Number(params.gun) || today));
-  const puzzle = puzzleForDay(PUZZLES, day);
+  const { refreshEnergy } = hints;
+  const params = useLocalSearchParams<{ no: string }>();
+  const level = Math.max(1, Number(params.no) || 1);
+  const puzzle = puzzleForLevel(PUZZLES, level);
 
   const { width } = useWindowDimensions();
   const boardWidth = Math.min(width, MAX_WIDTH) - 32;
@@ -43,7 +51,9 @@ export default function GameScreen() {
 
   const [progress, setProgress] = useState<Progress>(EMPTY_PROGRESS);
   const [loaded, setLoaded] = useState(false);
-  const [order, setOrder] = useState(() => seededShuffle(allWords(puzzle), day * 7919 + puzzle.id));
+  /** Bugünkü haklar bitti, bu bölüme başlanamıyor. */
+  const [locked, setLocked] = useState(false);
+  const [order, setOrder] = useState(() => seededShuffle(allWords(puzzle), level * 7919 + puzzle.id));
   const [selected, setSelected] = useState<string[]>([]);
   const [toast, setToast] = useState<string | null>(null);
   const [justSolved, setJustSolved] = useState<number | null>(null);
@@ -53,17 +63,29 @@ export default function GameScreen() {
   // Hızlı çift dokunuşta iki ipucu harcanmasın.
   const hintBusy = useRef(false);
 
+  // Reklamla hak kazanılınca bölümü yeniden açmayı denemek için artırılır.
+  const [retry, setRetry] = useState(0);
+
+  // Bölümü aç: yarım kalmışsa devam eder, yeniyse 1 hak harcar, hak yoksa kilitli kalır.
   useEffect(() => {
     let alive = true;
-    loadProgress(day).then((p) => {
+    (async () => {
+      const current = await loadCurrentLevel();
+      if (level > current) {
+        router.replace(`/bolum/${current}`);
+        return;
+      }
+      const p = await openLevel(level);
+      await refreshEnergy();
       if (!alive) return;
-      setProgress(p);
+      if (p) setProgress(p);
+      setLocked(!p);
       setLoaded(true);
-    });
+    })();
     return () => {
       alive = false;
     };
-  }, [day]);
+  }, [level, retry, refreshEnergy]);
 
   useEffect(() => () => {
     if (toastTimer.current) clearTimeout(toastTimer.current);
@@ -121,9 +143,10 @@ export default function GameScreen() {
 
   const persist = async (next: Progress) => {
     setProgress(next);
-    await saveProgress(day, next);
+    await saveProgress(level, next);
     if (next.status !== 'playing') {
-      await recordFinish(day, today, next.status === 'won', next.mistakes);
+      await advanceLevel(level);
+      await recordFinish(next.status === 'won', next.mistakes);
       // Puanlama penceresi açıldıysa aynı anda bir de reklam göstermeyelim.
       if (!(next.status === 'won' && (await maybeAskForReview()))) await showAdAfterPuzzle();
     }
@@ -174,10 +197,11 @@ export default function GameScreen() {
 
   return (
     <>
-      <Stack.Screen options={{ title: `Bağlantı #${day}` }} />
+      <Stack.Screen options={{ title: `Bölüm ${level}` }} />
       <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
         <View style={{ width: boardWidth }}>
-          <Text style={styles.hint}>Ortak noktası olan dörder kelimelik gruplar bul!</Text>
+          {locked && <EnergyEmpty onEarned={() => setRetry((r) => r + 1)} />}
+          {!locked && <Text style={styles.hint}>Ortak noktası olan dörder kelimelik gruplar bul!</Text>}
 
           <View style={{ gap: GAP }}>
             {shownGroups.map((g) => (
@@ -189,7 +213,7 @@ export default function GameScreen() {
                 <Text style={styles.hintTitle}>{g.title.toLocaleUpperCase('tr-TR')}</Text>
               </View>
             ))}
-            {loaded && progress.status !== 'lost' && (
+            {loaded && !locked && progress.status !== 'lost' && (
               <Animated.View style={{ gap: GAP, transform: [{ translateX: shake }] }}>
                 {rows.map((row, i) => (
                   <View key={i} style={styles.row}>
@@ -215,7 +239,7 @@ export default function GameScreen() {
             </View>
           )}
 
-          {loaded && !finished && (
+          {loaded && !locked && !finished && (
             <>
               <View style={styles.mistakes} accessibilityLabel={`Kalan hata hakkı: ${MAX_MISTAKES - progress.mistakes}`}>
                 <Text style={styles.mistakesLabel}>Kalan hata hakkı:</Text>
@@ -243,7 +267,7 @@ export default function GameScreen() {
                 />
               </View>
               <Button
-                label={hints.balance > 0 ? `💡 İpucu al (${hints.balance} hakkın var)` : '💡 İpucu kazan (reklam izle veya satın al)'}
+                label={hints.balance > 0 ? `💡 İpucu al (${hints.balance} ipucun var)` : '💡 İpucu kazan (reklam izle veya satın al)'}
                 onPress={takeHint}
                 disabled={!hintLeft}
                 style={styles.hintButton}
@@ -254,8 +278,7 @@ export default function GameScreen() {
           {finished && (
             <ResultCard
               puzzle={puzzle}
-              day={day}
-              isToday={day === today}
+              level={level}
               won={progress.status === 'won'}
               guesses={progress.guesses}
               hintsUsed={progress.hints.length}

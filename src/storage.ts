@@ -1,6 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { MAX_MISTAKES, type Level } from './game';
+import { DAILY_ENERGY } from './config';
+import { applyFinish, dayNumber, energyForToday, MAX_MISTAKES, type Energy, type Level, type Stats } from './game';
+
+export type { Stats };
 
 export type Status = 'playing' | 'won' | 'lost';
 
@@ -13,18 +16,8 @@ export interface Progress {
   hints: Level[];
 }
 
-export interface Stats {
-  played: number;
-  won: number;
-  currentStreak: number;
-  maxStreak: number;
-  /** Seri hesabı için son kazanılan günlük bulmacanın numarası. */
-  lastWonDay: number;
-  /** Kazanılan oyunlarda yapılan hata sayısına göre dağılım (0..3). */
-  distribution: number[];
-}
 
-const progressKey = (day: number) => `baglanti:progress:${day}`;
+const progressKey = (level: number) => `baglanti:level-progress:${level}`;
 const STATS_KEY = 'baglanti:stats';
 const HINTS_KEY = 'baglanti:hints';
 const GRANTED_KEY = 'baglanti:granted-purchases';
@@ -52,21 +45,27 @@ async function readJSON<T>(key: string, fallback: T): Promise<T> {
   }
 }
 
-export function loadProgress(day: number): Promise<Progress> {
-  return readJSON(progressKey(day), EMPTY_PROGRESS);
+/** Bölümün kayıtlı ilerlemesi; hiç başlanmadıysa null. */
+export async function loadProgress(level: number): Promise<Progress | null> {
+  try {
+    const raw = await AsyncStorage.getItem(progressKey(level));
+    return raw ? { ...EMPTY_PROGRESS, ...JSON.parse(raw) } : null;
+  } catch {
+    return null;
+  }
 }
 
-export async function saveProgress(day: number, progress: Progress): Promise<void> {
-  await AsyncStorage.setItem(progressKey(day), JSON.stringify(progress));
+export async function saveProgress(level: number, progress: Progress): Promise<void> {
+  await AsyncStorage.setItem(progressKey(level), JSON.stringify(progress));
 }
 
-export async function loadAllStatuses(days: number[]): Promise<Record<number, Status>> {
-  const pairs = await AsyncStorage.multiGet(days.map(progressKey));
+export async function loadAllStatuses(levels: number[]): Promise<Record<number, Status>> {
+  const pairs = await AsyncStorage.multiGet(levels.map(progressKey));
   const out: Record<number, Status> = {};
   pairs.forEach(([, raw], i) => {
     if (!raw) return;
     try {
-      out[days[i]] = (JSON.parse(raw) as Progress).status;
+      out[levels[i]] = (JSON.parse(raw) as Progress).status;
     } catch {
       // bozuk kayıt: oynanmamış say
     }
@@ -78,28 +77,14 @@ export function loadStats(): Promise<Stats> {
   return readJSON(STATS_KEY, EMPTY_STATS);
 }
 
-/** Seri, en son kazanılan gün dün ya da bugün değilse kopmuştur. */
+/** Seri, en son bölüm kazanılan gün dün ya da bugün değilse kopmuştur. */
 export function visibleStreak(stats: Stats, today: number): number {
   return stats.lastWonDay >= today - 1 ? stats.currentStreak : 0;
 }
 
-/**
- * Bir bulmaca bittiğinde istatistikleri günceller. Arşivden oynanan eski
- * bulmacalar seriyi etkilemez; yalnızca kendi gününde oynanan bulmaca sayılır.
- */
-export async function recordFinish(day: number, today: number, won: boolean, mistakes: number): Promise<Stats> {
-  if (day !== today) return loadStats();
-  const s = await loadStats();
-  const next: Stats = { ...s, distribution: [...s.distribution], played: s.played + 1 };
-  if (won) {
-    next.won += 1;
-    next.currentStreak = s.lastWonDay === day - 1 ? s.currentStreak + 1 : 1;
-    next.maxStreak = Math.max(s.maxStreak, next.currentStreak);
-    next.lastWonDay = day;
-    next.distribution[Math.min(mistakes, MAX_MISTAKES - 1)] += 1;
-  } else {
-    next.currentStreak = 0;
-  }
+/** Bir bölüm bittiğinde istatistikleri günceller (seri kuralları için bkz. applyFinish). */
+export async function recordFinish(won: boolean, mistakes: number): Promise<Stats> {
+  const next = applyFinish(await loadStats(), dayNumber(), won, mistakes);
   await AsyncStorage.setItem(STATS_KEY, JSON.stringify(next));
   return next;
 }
@@ -169,4 +154,70 @@ export async function bumpFinishedCount(): Promise<number> {
   const next = (Number(await AsyncStorage.getItem(key)) || 0) + 1;
   await AsyncStorage.setItem(key, String(next));
   return next;
+}
+
+// --- Bölümler ve günlük haklar ---
+
+const LEVEL_KEY = 'baglanti:current-level';
+const ENERGY_KEY = 'baglanti:energy';
+
+/** Oyuncunun sıradaki (henüz bitirmediği) bölümü. */
+export async function loadCurrentLevel(): Promise<number> {
+  try {
+    return Math.max(1, Number(await AsyncStorage.getItem(LEVEL_KEY)) || 1);
+  } catch {
+    return 1;
+  }
+}
+
+/** Bir bölüm bitince sıradaki bölümü ilerletir (geriye gitmez). */
+export async function advanceLevel(finished: number): Promise<void> {
+  const current = await loadCurrentLevel();
+  if (finished >= current) await AsyncStorage.setItem(LEVEL_KEY, String(finished + 1));
+}
+
+export async function loadEnergy(): Promise<Energy> {
+  let saved: Energy | null = null;
+  try {
+    const raw = await AsyncStorage.getItem(ENERGY_KEY);
+    saved = raw ? JSON.parse(raw) : null;
+  } catch {
+    saved = null;
+  }
+  return energyForToday(saved, dayNumber(), DAILY_ENERGY);
+}
+
+async function saveEnergy(e: Energy): Promise<void> {
+  await AsyncStorage.setItem(ENERGY_KEY, JSON.stringify(e));
+}
+
+export async function addEnergy(n: number): Promise<Energy> {
+  const e = await loadEnergy();
+  const next = { ...e, left: e.left + n };
+  await saveEnergy(next);
+  return next;
+}
+
+const starting = new Map<number, Promise<Progress | null>>();
+
+/**
+ * Bölümü açar. Daha önce başlanmışsa kayıtlı ilerlemeyi döner (hak harcamaz);
+ * yeni başlıyorsa 1 hak harcar. Hak yoksa null döner. Aynı bölüm için aynı anda gelen
+ * çağrılar tek hak harcar (ör. ekranın iki kez açılması).
+ */
+export function openLevel(level: number): Promise<Progress | null> {
+  const inFlight = starting.get(level);
+  if (inFlight) return inFlight;
+  const task = (async () => {
+    const existing = await loadProgress(level);
+    if (existing) return existing;
+    const energy = await loadEnergy();
+    if (energy.left <= 0) return null;
+    await saveEnergy({ ...energy, left: energy.left - 1 });
+    await saveProgress(level, EMPTY_PROGRESS);
+    return EMPTY_PROGRESS;
+  })();
+  starting.set(level, task);
+  task.finally(() => starting.delete(level));
+  return task;
 }

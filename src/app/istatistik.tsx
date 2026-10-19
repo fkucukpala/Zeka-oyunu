@@ -17,7 +17,7 @@ export default function StatsScreen() {
   const winRate = stats.played ? Math.round((stats.won / stats.played) * 100) : 0;
   const maxBar = Math.max(1, ...stats.distribution);
   const tiles = [
-    { label: 'Oynanan', value: stats.played },
+    { label: 'Oynanan bölüm', value: stats.played },
     { label: 'Kazanma %', value: winRate },
     { label: 'Güncel seri', value: visibleStreak(stats, dayNumber()) },
     { label: 'En uzun seri', value: stats.maxStreak },
@@ -34,7 +34,7 @@ export default function StatsScreen() {
         ))}
       </View>
 
-      <Text style={styles.heading}>Kazandığın oyunlarda hata sayısı</Text>
+      <Text style={styles.heading}>Kazandığın bölümlerde hata sayısı</Text>
       {stats.distribution.map((count, mistakes) => (
         <View key={mistakes} style={styles.barRow}>
           <Text style={styles.barLabel}>{mistakes}</Text>
@@ -50,7 +50,7 @@ export default function StatsScreen() {
           </View>
         </View>
       ))}
-      <Text style={styles.note}>Seri yalnızca bulmaca kendi gününde çözüldüğünde artar.</Text>
+      <Text style={styles.note}>Seri: arka arkaya en az bir bölüm kazandığın gün sayısı.</Text>
     </ScrollView>
   );
 }

@@ -5,9 +5,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button } from '../components/Button';
 import { disableReminder, enableReminder, remindersSupported } from '../engagement';
-import { dateForDay, dayNumber, type Level } from '../game';
+import { DAILY_ENERGY } from '../config';
+import { dayNumber, type Level } from '../game';
 import { useStore } from '../store';
-import { getFlag, loadAllStatuses, loadStats, visibleStreak, type Status } from '../storage';
+import { getFlag, loadAllStatuses, loadCurrentLevel, loadStats, visibleStreak, type Status } from '../storage';
 import { levelColors, useTheme, useThemedStyles, type Colors, type ThemePreference } from '../theme';
 
 const LOGO_LEVELS: Level[] = [0, 1, 2, 3];
@@ -20,23 +21,27 @@ const THEME_OPTIONS: { value: ThemePreference; label: string }[] = [
 export default function HomeScreen() {
   const styles = useThemedStyles(makeStyles);
   const { preference, setPreference } = useTheme();
-  const { balance } = useStore();
+  const { balance, energy, refreshEnergy } = useStore();
   const today = dayNumber();
+  const [level, setLevel] = useState(1);
   const [status, setStatus] = useState<Status | undefined>();
   const [streak, setStreak] = useState(0);
   const [reminderOn, setReminderOn] = useState(false);
 
-  // Oyundan dönünce durum ve seri güncellensin diye her odaklanmada yeniden okunur.
+  // Oyundan dönünce bölüm, hak ve seri güncellensin diye her odaklanmada yeniden okunur.
   useFocusEffect(
     useCallback(() => {
-      loadAllStatuses([today]).then((s) => setStatus(s[today]));
+      loadCurrentLevel().then(async (l) => {
+        setLevel(l);
+        setStatus((await loadAllStatuses([l]))[l]);
+      });
+      refreshEnergy();
       loadStats().then((s) => setStreak(visibleStreak(s, today)));
       getFlag('reminder-on').then(setReminderOn);
-    }, [today]),
+    }, [today, refreshEnergy]),
   );
 
-  const dateLabel = dateForDay(today).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
-  const playLabel = status === 'playing' ? 'Devam et' : status ? 'Sonucu gör' : 'Bugünün bulmacası';
+  const playLabel = status === 'playing' ? `Bölüm ${level} · Devam et` : `Bölüm ${level} · Oyna`;
 
   return (
     <SafeAreaView style={styles.screen}>
@@ -50,13 +55,14 @@ export default function HomeScreen() {
         <Text style={styles.tagline}>16 kelime, 4 gizli grup. Bağlantıyı bulabilir misin?</Text>
 
         <Text style={styles.date}>
-          {dateLabel} · Bulmaca #{today}
+          ⚡ Bugünkü hakkın: <Text style={styles.energyValue}>{energy}</Text>
+          {energy <= DAILY_ENERGY ? ` / ${DAILY_ENERGY}` : ''}
         </Text>
         {streak > 0 && <Text style={styles.streak}>🔥 {streak} günlük seri</Text>}
 
         <View style={styles.buttons}>
-          <Button label={playLabel} variant="primary" onPress={() => router.push(`/oyun/${today}`)} />
-          <Button label="Arşiv" onPress={() => router.push('/arsiv')} />
+          <Button label={playLabel} variant="primary" onPress={() => router.push(`/bolum/${level}`)} />
+          <Button label="Bölümler" onPress={() => router.push('/bolumler')} />
           <Button label="İstatistikler" onPress={() => router.push('/istatistik')} />
           <Button label={`💡 İpuçları (${balance})`} onPress={() => router.push('/magaza')} />
           <Button label="Nasıl oynanır?" onPress={() => router.push('/nasil')} />
@@ -114,6 +120,7 @@ const makeStyles = (c: Colors) =>
     title: { fontSize: 40, fontWeight: '900', color: c.text },
     tagline: { fontSize: 17, color: c.text, textAlign: 'center', marginTop: 8, maxWidth: 320 },
     date: { fontSize: 15, color: c.muted, marginTop: 24 },
+    energyValue: { fontWeight: '800', color: c.text },
     streak: { fontSize: 16, fontWeight: '700', color: c.text, marginTop: 6 },
     buttons: { maxWidth: 360, width: '100%', marginTop: 28, gap: 12 },
     themeRow: { flexDirection: 'row', alignItems: 'center', gap: 12, marginTop: 28 },

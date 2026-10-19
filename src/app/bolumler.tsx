@@ -2,8 +2,7 @@ import { router, useFocusEffect } from 'expo-router';
 import { useCallback, useMemo, useState } from 'react';
 import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 
-import { dateForDay, dayNumber } from '../game';
-import { loadAllStatuses, type Status } from '../storage';
+import { loadAllStatuses, loadCurrentLevel, type Status } from '../storage';
 import { levelColors, useTheme, useThemedStyles, type Colors } from '../theme';
 
 const BADGE: Record<Status, { label: string; color: string }> = {
@@ -12,38 +11,39 @@ const BADGE: Record<Status, { label: string; color: string }> = {
   playing: { label: 'Devam ediyor', color: levelColors[0] },
 };
 
-export default function ArchiveScreen() {
+export default function LevelsScreen() {
   const styles = useThemedStyles(makeStyles);
   const { colors } = useTheme();
-  const today = dayNumber();
-  const days = useMemo(() => Array.from({ length: today }, (_, i) => today - i), [today]);
+  const [current, setCurrent] = useState(1);
+  const levels = useMemo(() => Array.from({ length: current }, (_, i) => current - i), [current]);
   const [statuses, setStatuses] = useState<Record<number, Status>>({});
 
   useFocusEffect(
     useCallback(() => {
-      loadAllStatuses(days).then(setStatuses);
-    }, [days]),
+      loadCurrentLevel().then(async (c) => {
+        setCurrent(c);
+        setStatuses(await loadAllStatuses(Array.from({ length: c }, (_, i) => i + 1)));
+      });
+    }, []),
   );
 
   return (
     <FlatList
       style={styles.list}
       contentContainerStyle={styles.content}
-      data={days}
-      keyExtractor={(d) => String(d)}
-      renderItem={({ item: day }) => {
-        const badge = statuses[day] ? BADGE[statuses[day]] : null;
+      data={levels}
+      keyExtractor={(l) => String(l)}
+      renderItem={({ item: level }) => {
+        const badge = statuses[level] ? BADGE[statuses[level]] : null;
         return (
           <Pressable
             accessibilityRole="button"
-            onPress={() => router.push(`/oyun/${day}`)}
+            onPress={() => router.push(`/bolum/${level}`)}
             style={({ pressed }) => [styles.item, pressed && { backgroundColor: colors.tilePressed }]}
           >
             <View>
-              <Text style={styles.title}>Bulmaca #{day}</Text>
-              <Text style={styles.date}>
-                {dateForDay(day).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', weekday: 'long' })}
-              </Text>
+              <Text style={styles.title}>Bölüm {level}</Text>
+              {level === current && !statuses[level] && <Text style={styles.date}>Sıradaki bölüm</Text>}
             </View>
             {badge && (
               <View style={[styles.badge, { backgroundColor: badge.color }]}>

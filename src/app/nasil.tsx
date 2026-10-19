@@ -1,5 +1,6 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
+import { DAILY_ENERGY, ENERGY_PER_AD } from '../config';
 import type { Level } from '../game';
 import { levelColors, levelNames, useThemedStyles, type Colors } from '../theme';
 
@@ -18,7 +19,8 @@ export default function HowToScreen() {
       <Text style={styles.li}>• 4 hata hakkın var. 3 kelimen doğruysa “Bir eksik!” uyarısı çıkar.</Text>
       <Text style={styles.li}>• Dikkat: bazı kelimeler birden fazla gruba uyuyor gibi görünür, ama tek doğru çözüm vardır.</Text>
       <Text style={styles.li}>• Takıldığında “İpucu al” ile bir grubun konusunu öğrenebilirsin.</Text>
-      <Text style={styles.li}>• Her gece yarısı yeni bulmaca gelir. Kaçırdıklarını Arşiv’den oynayabilirsin.</Text>
+      <Text style={styles.li}>• Her gün {DAILY_ENERGY} bölüm hakkın olur; her yeni bölüm 1 hak harcar. Hakların bitince reklam izleyerek {ENERGY_PER_AD} hak daha kazanabilirsin.</Text>
+      <Text style={styles.li}>• Haklar her gece yarısı yenilenir. Yarım bıraktığın bölüme dönmek hak harcamaz.</Text>
 
       <Text style={styles.heading}>Örnekler</Text>
       {EXAMPLES.map((e) => (

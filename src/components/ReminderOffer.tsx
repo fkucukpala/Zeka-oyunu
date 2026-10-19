@@ -33,8 +33,8 @@ export function ReminderOffer() {
 
   return (
     <View style={styles.box}>
-      <Text style={styles.title}>🔔 Yeni bulmacayı kaçırma</Text>
-      <Text style={styles.body}>Her gün {REMINDER_HOUR}:00’da yeni bulmaca hazır olduğunda haber vereyim mi?</Text>
+      <Text style={styles.title}>🔔 Haklarını boşa harcama</Text>
+      <Text style={styles.body}>Her gün {REMINDER_HOUR}:00’da yeni hakların hazır olduğunda haber vereyim mi?</Text>
       <View style={styles.row}>
         <Button
           label="Hayır"

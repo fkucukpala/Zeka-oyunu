@@ -2,7 +2,7 @@
 // günlük hatırlatma bildirimi ve Play Store puanlama isteği.
 import { Platform } from 'react-native';
 
-import { REMINDER_HOUR, REVIEW_AFTER_WINS } from './config';
+import { DAILY_ENERGY, REMINDER_HOUR, REVIEW_AFTER_WINS } from './config';
 import { loadNative } from './native';
 import { getFlag, loadStats, setFlag } from './storage';
 
@@ -46,8 +46,8 @@ export async function enableReminder(): Promise<boolean> {
     await notifications.cancelAllScheduledNotificationsAsync();
     await notifications.scheduleNotificationAsync({
       content: {
-        title: 'Bugünün bulmacası hazır 🧩',
-        body: '16 kelime, 4 gizli grup. Serini korumak için bir dakikan yeter!',
+        title: `${DAILY_ENERGY} yeni bölüm hakkın hazır 🧩`,
+        body: 'Bugün en az bir bölüm çöz, serini koru!',
       },
       trigger: {
         type: notifications.SchedulableTriggerInputTypes.DAILY,
