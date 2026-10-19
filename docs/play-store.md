@@ -70,7 +70,7 @@ ilk bölümü çöz!
 
 ## Yayın sonrası gelir kontrol listesi
 
-- [ ] AdMob'daki gerçek reklam kimlikleri `app.json` ve `src/config.ts`'e yazıldı
+- [ ] AdMob'daki gerçek kimlikler `AndroidManifest.xml` (uygulama) ve `Config.kt` (reklam birimleri) içine yazıldı
 - [ ] AdMob > Gizlilik ve mesajlaşma: GDPR mesajı yayınlandı
 - [ ] Play Console'da ürünler: `ipucu_5`, `ipucu_15`, `ipucu_40` (tüketilebilir), `reklamsiz` (tek seferlik)
 - [ ] Önerilen başlangıç fiyatları: 5 ipucu ₺19,99 · 15 ipucu ₺44,99 · 40 ipucu ₺89,99 · reklamsız ₺79,99

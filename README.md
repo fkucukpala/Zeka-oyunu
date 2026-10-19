@@ -1,103 +1,95 @@
-# Bağlantı — Türkçe günlük kelime bulmacası
+# Bağlantı — Türkçe kelime bulmacası (Android, Kotlin)
 
-16 kelimeyi, ortak noktası olan 4'erli gruplara ayır. Her gün herkese aynı yeni bulmaca gelir; 4 hata hakkın var.
-Android öncelikli olarak Expo (React Native + TypeScript) ile yazıldı.
-
-> **Kotlin / Android Studio sürümü:** [`android-kotlin/`](android-kotlin/README.md) klasöründe aynı oyunun
-> Jetpack Compose ile yazılmış yerel Android karşılığı var. Bulmacalar iki sürümde ortaktır.
+16 kelimeyi, ortak noktası olan 4'erli gruplara ayır. Oyun bölüm bölüm ilerler: her gün 10 bölüm hakkı,
+bitince ödüllü reklam izleyerek 5 hak daha. **Kotlin + Jetpack Compose** ile yazılmış yerel Android uygulaması.
 
 ## Özellikler
 
 - **Bölüm sistemi:** her gün 10 bölüm hakkı (gece yarısı yenilenir); bitince ödüllü reklamla +5 hak.
   Yarım kalan bölüme dönmek hak harcamaz. Oynanan bölümler **Bölümler** listesinde
-- 4 zorluk rengi, "Bir eksik!" uyarısı, aynı tahmini tekrar etme koruması
-- Karıştır / Temizle / Gönder, titreşimli geri bildirim, sallanma ve açılma animasyonları
+- 4 zorluk rengi, "Bir eksik!" uyarısı, aynı tahmini tekrar etme koruması, 4 hata hakkı
+- Karıştır / Temizle / Gönder, titreşimli geri bildirim, sallanma animasyonu
 - Emoji ızgaralı **sonuç paylaşma** (WhatsApp, X vb.)
-- İstatistikler: oynanan, kazanma oranı, gün bazlı seri (arka arkaya en az bir bölüm kazanılan gün), hata dağılımı
-- İlerleme cihazda saklanır (AsyncStorage); oyuna kaldığın yerden devam edilir
-- Karanlık tema (sistemi takip eder, ana sayfadan Sistem / Açık / Koyu seçilebilir)
+- İstatistikler: oynanan, kazanma oranı, gün bazlı seri, hata dağılımı
+- Karanlık tema (sistemi takip eder; ana sayfadan Sistem / Açık / Koyu seçilebilir)
 - **İpucu:** çözülmemiş en kolay grubun konusunu açar; yeni oyuncuya 3 hediye
 - **Gelir:** bölüm sonu geçiş reklamı (ilk 2 bölümde yok, en az 90 sn arayla), ödüllü reklamla hak ve ipucu,
   Google Play'den ipucu paketleri ve tek seferlik "Reklamları kaldır"
-- **Geri dönüş:** günlük hatırlatma bildirimi (ilk bulmaca sonunda teklif edilir), 3. galibiyetten sonra Play puanlama isteği
+- **Geri dönüş:** günlük hatırlatma bildirimi, 3. galibiyetten sonra Play puanlama isteği
+- İnternet olmadan da oynanır; ilerleme cihazda saklanır ve Google yedeğiyle yeni telefona taşınır
 
-## Android'de deneme
+## Android Studio'da açma
+
+1. Android Studio'yu kur (güncel kararlı sürüm).
+2. **File > Open** ile bu klasörü (deponun kökünü) seç.
+3. Gradle eşitlemesi bitince ▶ (Run) ile emülatörde veya USB'ye bağlı telefonda çalıştır.
+
+Komut satırından:
 
 ```bash
-npm install
-npx expo start
+./gradlew :core:test        # oyun mantığı ve bulmaca verisi testleri
+./gradlew assembleDebug     # app/build/outputs/apk/debug/app-debug.apk
 ```
 
-Telefona Play Store'dan **Expo Go** uygulamasını kur ve terminaldeki QR kodu okut.
+Her push'ta GitHub Actions projeyi derleyip testleri çalıştırır; **Actions > Android (Kotlin) > son çalıştırma >
+Artifacts** bölümünden hazır `app-debug.apk` indirilebilir.
 
-> Expo Go'da reklam ve satın alma **kapalıdır** (bu yerel modüller Expo Go'da yok); oyun, tema ve
-> hediye ipuçları çalışır. Geliştirme modunda ödüllü reklam yerine "(test)" düğmesi anında ödül verir, böylece
-> hak/ipucu akışı bilgisayarda da denenebilir. Gerçek reklam ve satın alma için geliştirme derlemesi gerekir:
-> `npx eas-cli@latest build -p android --profile development`
+Debug derlemesinde ödüllü reklam yüklenemezse (ör. Google Play hizmetleri olmayan emülatör) "haklar bitti"
+ekranında **"Test: reklamsız +5 hak"** düğmesi çıkar; release derlemesinde bu düğme yoktur.
 
-## APK / Play Store derlemesi (EAS)
+## Proje yapısı
 
-```bash
-npx eas-cli@latest login
-npx eas-cli@latest build -p android --profile preview      # telefona kurulabilir .apk
-npx eas-cli@latest build -p android --profile production   # Play Store için .aab
 ```
-
-Paket adı: `com.fkucukpala.baglanti` (`app.json` içinde değiştirilebilir). Her yeni mağaza sürümünde
-`android.versionCode` değerini artır.
-
-## Para kazanma kurulumu (yayından önce)
-
-Kod şu an Google'ın **test** reklam kimlikleriyle gelir; gerçek gelir için:
-
-1. **AdMob:** [admob.google.com](https://admob.google.com)'da uygulama ve bir "Geçiş (interstitial)" reklam birimi oluştur.
-   - Uygulama kimliğini (`ca-app-pub-…~…`) `app.json` > `plugins` > `react-native-google-mobile-ads` > `androidAppId` alanına yaz.
-   - Bir "Geçiş" ve bir "Ödüllü" reklam birimi oluştur; kimliklerini (`ca-app-pub-…/…`) `src/config.ts` > `AD_UNITS.android` alanına yaz.
-   - AdMob > Gizlilik ve mesajlaşma bölümünden GDPR izin mesajını oluştur (uygulama, formu açılışta otomatik gösterir).
-2. **Google Play ürünleri:** Play Console > Uygulama içi ürünler'de `ipucu_5`, `ipucu_15`, `ipucu_40`
-   (**tüketilebilir**) ve `reklamsiz` (**tek seferlik**) ürünlerini oluştur ve fiyatlarını belirle
-   (kimlikler `src/config.ts` içinde).
-   Satın almalar yalnızca Play'e yüklenmiş (dahili test kanalı yeterli) bir sürümde çalışır.
-3. **Play Console zorunlulukları:** gizlilik politikası bağlantısı, "Reklam içerir" beyanı ve Veri güvenliği formu
-   (AdMob reklam kimliği topladığı için).
-
-> Not: İpucu bakiyesi cihazda tutulur ve satın almalar sunucuda doğrulanmaz. Başlangıç için yeterli; gelir
-> büyürse satın alma doğrulaması için bir sunucu eklemek önerilir.
-
-Mağaza sayfası metni, ekran görüntüsü önerileri ve yayın kontrol listesi: [docs/play-store.md](docs/play-store.md)
-
-## Geliştirme
-
-```bash
-npm test            # oyun mantığı + bulmaca verisi doğrulaması
-npm run typecheck
-npm run lint
+core/   Saf Kotlin oyun mantığı (Android'e bağımlı değil) + JUnit testleri
+        Game.kt: tahmin değerlendirme, ipucu, günlük hak, seri, paylaşım metni, veri doğrulama
+app/    Android uygulaması
+  Config.kt                      Günlük hak, reklam sıklığı, reklam ve ürün kimlikleri vb. tüm ayarlar
+  data/GameStore.kt              İlerleme, istatistik, haklar, ipuçları, ayarlar (SharedPreferences)
+  monetization/AdsManager.kt     AdMob geçiş + ödüllü reklam, GDPR izin formu (UMP)
+  monetization/BillingManager.kt Google Play Billing: ipucu paketleri, "Reklamları kaldır"
+  engagement/Engagement.kt       Günlük hatırlatma bildirimi (WorkManager), Play puanlama isteği
+  ui/                            Compose ekranları: ana sayfa, oyun, bölümler, istatistik, mağaza…
+  assets/puzzles.json            Bulmaca havuzu
+docs/play-store.md               Mağaza sayfası metni ve yayın kontrol listesi
 ```
 
 ## Yeni bulmaca ekleme
 
-`src/puzzles.ts` dosyasına yeni bir kayıt ekle:
+Bulmacalar `app/src/main/assets/puzzles.json` dosyasındadır; her grup tek satırdır:
+
+```json
+{"id": 201, "groups": [
+  {"level":0,"title":"Meyveler","words":["ELMA","ARMUT","ERİK","AYVA"]},
+  ...
+]}
+```
 
 - 4 grup, her grupta 4 kelime, seviyeler `0` (kolay) → `3` (en zor) birer kez
 - Kelimeler Türkçe büyük harfle (`İ`, `I` dikkat), bulmaca içinde tekrar etmemeli
 - İyi bulmacada bazı kelimeler başka bir gruba da uyuyormuş gibi görünür, ama çözüm tektir
 
-`npm test` yapısal hataları ve farklı bulmacalarda tekrar eden grupları yakalar. Bölüm N, havuzdaki N. bulmacadır;
-havuz bitince başa döner. Oyuncu günde 10+ bölüm oynayabildiği için havuzu düzenli büyütmek gerekir.
-Günlük hak ve reklam başına hak sayısı `src/config.ts` içindeki `DAILY_ENERGY` / `ENERGY_PER_AD` ile değişir.
+`./gradlew :core:test` yapısal hataları ve farklı bulmacalarda tekrar eden grupları (3+ ortak kelime) yakalar.
+Bölüm N, havuzdaki N. bulmacadır; havuz bitince başa döner. Oyuncu günde 10+ bölüm oynayabildiği için
+havuzu düzenli büyütmek gerekir.
 
-## Proje yapısı
+## Para kazanma kurulumu (yayından önce)
 
-```
-src/app/            Ekranlar (Expo Router): ana sayfa, bolum/[no], bölümler, istatistik, nasıl oynanır, mağaza
-src/components/     Tile, SolvedGroup, ResultCard, Button
-src/game.ts         Saf oyun mantığı (gün hesabı, tahmin değerlendirme, paylaşım metni)
-src/puzzles.ts      Bulmaca havuzu
-src/storage.ts      İlerleme, istatistik ve ipucu bakiyesi kaydı
-src/theme.tsx       Açık/koyu renk paletleri ve tema seçimi
-src/ads.ts          AdMob geçiş ve ödüllü reklam (web'de ads.web.ts ile kapalı)
-src/store.tsx       İpucu bakiyesi, Google Play satın almaları, reklamsız paket
-src/engagement.ts   Günlük hatırlatma bildirimi ve Play puanlama isteği
-src/config.ts       Reklam kimlikleri, reklam sıklığı, ürünler ve diğer gelir ayarları
-tests/              Node test runner ile birim testleri
-```
+Kod şu an Google'ın **test** reklam kimlikleriyle gelir; gerçek gelir için:
+
+1. **AdMob:** [admob.google.com](https://admob.google.com)'da uygulama, bir "Geçiş" ve bir "Ödüllü" reklam birimi oluştur.
+   - Uygulama kimliğini (`ca-app-pub-…~…`) `app/src/main/AndroidManifest.xml` içindeki `APPLICATION_ID` alanına yaz.
+   - Reklam birimi kimliklerini (`ca-app-pub-…/…`) `Config.kt` içindeki `INTERSTITIAL_AD_UNIT` ve `REWARDED_AD_UNIT` alanlarına yaz.
+   - AdMob > Gizlilik ve mesajlaşma bölümünden GDPR izin mesajını oluştur (uygulama formu açılışta otomatik gösterir).
+2. **Google Play ürünleri:** Play Console > Uygulama içi ürünler'de `ipucu_5`, `ipucu_15`, `ipucu_40`
+   (**tüketilebilir**) ve `reklamsiz` (**tek seferlik**) ürünlerini oluştur ve fiyatlarını belirle.
+   Satın almalar yalnızca Play'e yüklenmiş (dahili test kanalı yeterli) bir sürümde çalışır.
+3. **Play Console zorunlulukları:** gizlilik politikası bağlantısı, "Reklam içerir" beyanı ve Veri güvenliği formu.
+4. **İmzalı sürüm:** Android Studio > **Build > Generate Signed App Bundle** (Play Store için `.aab`).
+   Her yeni mağaza sürümünde `app/build.gradle.kts` içindeki `versionCode` değerini artır.
+
+> İpucu bakiyesi cihazda tutulur ve satın almalar sunucuda doğrulanmaz. Başlangıç için yeterli; gelir
+> büyürse satın alma doğrulaması için bir sunucu eklemek önerilir.
+
+Mağaza sayfası metni, ekran görüntüsü önerileri ve yayın kontrol listesi: [docs/play-store.md](docs/play-store.md)
+
+> Projenin ilk sürümü Expo (React Native) ile yazılmıştı; o kod git geçmişinde duruyor.
